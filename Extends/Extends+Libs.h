@@ -27,7 +27,7 @@
 #import "NSArray+NSArray_Bundle.h"
 #import "NSArray+NSArray_Tool.h"
 
-#import "CLLocation+CLLocation_Tool.h"
+
 
 #import "UIColor+UIColor_Tool.h"
 

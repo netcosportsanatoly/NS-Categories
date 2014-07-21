@@ -36,7 +36,6 @@
 
 -(void)visiteurView:(void(^)(UIView *elt))cbBefore cbAfter:(void(^)(UIView *elt))cbAfter;
 -(NSInteger)setId:(NSString*)idview;
--(BOOL)generateId;
 -(void)replavesubview:(NSArray*)newView keepOldView:(BOOL)keepOldView;
 -(UIView*)getMasterView;
 - (UIImage*)screenshot;
