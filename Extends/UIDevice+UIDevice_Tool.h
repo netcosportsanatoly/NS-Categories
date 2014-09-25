@@ -15,6 +15,7 @@
 +(BOOL)isOrientationPortrait;
 +(CGRect)getScreenFrame;
 +(BOOL) isIphone5;
++(BOOL) isIphone4;
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
 #define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)

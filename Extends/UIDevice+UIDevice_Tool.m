@@ -131,6 +131,11 @@
     return [UIDevice getScreenFrame].size.height == 568 ? YES : NO;
 }
 
++(BOOL) isIphone4
+{
+    return [UIDevice getScreenFrame].size.height == 480 ? YES : NO;
+}
+
 - (NSString *)getDeviceType
 {
     NSString *platform = [self platformRawString];
