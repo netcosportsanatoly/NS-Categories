@@ -23,12 +23,12 @@ typedef enum{
 
 
 -(BOOL)diffForNewArrayElement:(NSArray*)newArray comp:(NSCategoryDiffComp(^)(id itemOld, id itemNew))comp complete:(void(^)(BOOL changed, NSArray *remove, NSArray *insert, NSArray *update))completed;
+
 -(BOOL)diffForNewArrayItem:(NSArray *)newArray section:(NSInteger)section comp:(NSCategoryDiffComp(^)(id itemOld, id itemNew))comp complete:(void(^)(BOOL changed, NSArray *remove, NSArray *insert, NSArray *update))completed;
 
 -(NSArray *) sortAlphabeticallyArrayOfObjectUsing:(NSString *)key isAsc:(BOOL)asc;
 
 @end
-
 
 
 @interface NSArray (Reverse)
@@ -47,9 +47,16 @@ typedef enum{
 @end
 
 
-
 @interface NSMutableArray (Reverse)
 
 - (void)reverseMutableArray;
+
+@end
+
+@interface NSMutableArray (NSMutableArray_Tool)
+
+-(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
+
+-(void)removeStringIdenticalTo:(NSString *)stringToRemove;
 
 @end

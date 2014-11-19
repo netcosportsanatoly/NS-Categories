@@ -178,3 +178,31 @@
 }
 
 @end
+
+@implementation NSMutableArray (NSMutableArray_Tool)
+
+-(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate
+{
+    NSIndexSet *setOfIndexesToRemove = [self indexesOfObjectsPassingTest:predicate];
+    
+    if (setOfIndexesToRemove && [setOfIndexesToRemove count] > 0)
+    {
+        [self removeObjectsAtIndexes:setOfIndexesToRemove];
+    }
+}
+
+-(void)removeStringIdenticalTo:(NSString *)stringToRemove
+{
+    if (!stringToRemove)
+        return ;
+
+    [self removeObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
+    {
+        if (obj && [obj isKindOfClass:[NSString class]] && [obj isEqualToString:stringToRemove])
+            return YES;
+        else
+            return NO;
+    }];
+}
+
+@end
