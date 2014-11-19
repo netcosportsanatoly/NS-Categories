@@ -117,6 +117,20 @@
     return [self sortedArrayUsingDescriptors:@[brandDescriptor]];
 }
 
+-(BOOL)containsString:(NSString *)stringToCompareWith
+{
+    __block BOOL returnedValue = NO;
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+       if (obj && [obj isKindOfClass:[NSString class]] && [obj isEqualToString:stringToCompareWith])
+       {
+           returnedValue = YES;
+           *stop = YES;
+       }
+    }];
+    return returnedValue;
+}
+
 @end
 
 

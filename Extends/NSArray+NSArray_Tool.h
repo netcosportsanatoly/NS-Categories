@@ -28,6 +28,8 @@ typedef enum{
 
 -(NSArray *) sortAlphabeticallyArrayOfObjectUsing:(NSString *)key isAsc:(BOOL)asc;
 
+-(BOOL)containsString:(NSString *)stringToCompareWith;
+
 @end
 
 
