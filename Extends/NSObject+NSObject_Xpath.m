@@ -186,6 +186,12 @@
 	return [self getXpath:xpath type:[NSArray class] def:nil];
 }
 
+-(NSArray*)getXpathEmptyArray:(NSString*)xpath
+{
+    NSArray *arrayReturned = [self getXpath:xpath type:[NSArray class] def:nil];
+    return arrayReturned ? arrayReturned : @[];
+}
+
 -(BOOL)getXpathBool:(NSString*)xpath defaultValue:(BOOL)defaultValue{
 	
     NSNumber *returnedValue = [self getXpath:xpath type:[NSNumber class] def:nil];

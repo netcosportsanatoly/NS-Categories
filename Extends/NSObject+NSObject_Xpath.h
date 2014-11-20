@@ -19,6 +19,7 @@
 -(NSString *)getXpathNilString:(NSString*)xpath;
 -(NSDictionary *)getXpathNilDictionary:(NSString*)xpath;
 -(NSArray*)getXpathNilArray:(NSString*)xpath;
+-(NSArray*)getXpathEmptyArray:(NSString*)xpath;
 -(BOOL)getXpathBool:(NSString*)xpath defaultValue:(BOOL)defaultValue;
 
 -(id)ToMutable;
