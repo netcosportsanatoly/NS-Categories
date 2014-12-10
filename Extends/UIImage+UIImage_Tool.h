@@ -16,6 +16,7 @@
 + (void) applyStackBlurToBuffer:(UInt8*)targetBuffer width:(const int)w height:(const int)h withRadius:(NSUInteger)inradius;
 
 + (UIImage *)imageWithImage:(UIImage *)sourceImage scaledToWidth:(float)width;
++ (UIImage *)imageWithImage:(UIImage *)sourceImage scaledRelativeToSize:(CGSize)size;
 + (UIImage *)imageWithImage:(UIImage *)image withSize:(CGSize)newSize;
 + (UIImage *)resizableImage:(NSString *)imageName withCapInsets:(UIEdgeInsets)capInsets;
 + (UIImage *)colorizeImage:(UIImage *)baseImage color:(UIColor *)theColor;

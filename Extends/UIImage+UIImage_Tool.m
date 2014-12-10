@@ -69,6 +69,27 @@ inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeo
     return newImage;
 }
 
++ (UIImage *)imageWithImage:(UIImage *)sourceImage scaledRelativeToSize:(CGSize)size
+{
+    float screen_tangent = size.height / size.width;
+    float image_tangent = sourceImage.size.height / sourceImage.size.width;
+    
+    float newWidth = size.height / image_tangent;
+    float newHeight = size.height;
+    
+    if(screen_tangent < image_tangent) {
+        newWidth = size.width;
+        newHeight = size.width * image_tangent;
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(newWidth, newHeight), NO, 0.0f);
+    [sourceImage drawInRect:CGRectMake(0, 0, newWidth, newHeight)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+
 + (UIImage *)imageWithImage:(UIImage *)image withSize:(CGSize)newSize;
 {
     UIGraphicsBeginImageContext(newSize);
