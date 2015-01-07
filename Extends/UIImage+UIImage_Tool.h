@@ -24,5 +24,6 @@
 
 + (UIImage*)loadImageFromFile:(NSString *)fileName inTime:(int)time;
 - (void)saveImageInFile:(NSString *)fileName;
+- (UIImage *)imageRotatedByDegrees:(CGFloat)degrees;
 
 @end
