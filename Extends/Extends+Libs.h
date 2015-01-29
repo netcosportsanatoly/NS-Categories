@@ -9,6 +9,7 @@
 #ifndef Extends_Extends_Libs_h
 #define Extends_Extends_Libs_h
 
+#import "NSUsefulDefines.h"
 
 #import "NSObject+NSObject_Tool.h"
 #import "NSObject+NSObject_File.h"
@@ -46,23 +47,3 @@
 #import "UINavigationController+UINavigationController_Tool.h"
 
 #endif
-
-
-#ifdef DEBUG
-#define DLog(...) NSLog(@"%s [line %d] : %@", __PRETTY_FUNCTION__, __LINE__, [NSString stringWithFormat:__VA_ARGS__])
-#define ALog(...) [[NSAssertionHandler currentHandler] handleFailureInFunction:[NSString stringWithCString:__PRETTY_FUNCTION__ encoding:NSUTF8StringEncoding] file:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] lineNumber:__LINE__ description:__VA_ARGS__]
-#else
-#define DLog(...) do { } while (0)
-#ifndef NS_BLOCK_ASSERTIONS
-#define NS_BLOCK_ASSERTIONS
-#endif
-#define ALog(...) NSLog(@"%s [line %d] : %@", __PRETTY_FUNCTION__, __LINE__, [NSString stringWithFormat:__VA_ARGS__])
-#endif
-
-/*
-
- #import <QuartzCore/QuartzCore.h>
- #import <Accelerate/Accelerate.h>
- systemconf
- 
-*/
