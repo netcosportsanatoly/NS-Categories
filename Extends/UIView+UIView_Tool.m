@@ -40,46 +40,87 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 }
 
 -(void)bouingAppear:(BOOL)appear oncomplete:(void (^)(void))oncomplete{
-	if (!appear){
-		self.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1.0);
-		CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-		bounceAnimation.values = [NSArray arrayWithObjects:
-								  [NSNumber numberWithFloat:1.0],
-								  [NSNumber numberWithFloat:0.8],
-								  [NSNumber numberWithFloat:1.1],
-								  [NSNumber numberWithFloat:0.3], nil];
-		bounceAnimation.duration = 0.5;
-		bounceAnimation.removedOnCompletion = NO;
-		[self.layer addAnimation:bounceAnimation forKey:@"bounce"];
-		self.layer.transform = CATransform3DIdentity;
-		
-		[UIView animateWithDuration:0.6 animations:^{
-			self.alpha = 0.0;
-		} completion:^(BOOL finished) {
+    if (!appear){
+        self.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1.0);
+        CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+        bounceAnimation.values = [NSArray arrayWithObjects:
+                                  [NSNumber numberWithFloat:1.0],
+                                  [NSNumber numberWithFloat:0.8],
+                                  [NSNumber numberWithFloat:1.1],
+                                  [NSNumber numberWithFloat:0.3], nil];
+        bounceAnimation.duration = 0.5;
+        bounceAnimation.removedOnCompletion = NO;
+        [self.layer addAnimation:bounceAnimation forKey:@"bounce"];
+        self.layer.transform = CATransform3DIdentity;
+        
+        [UIView animateWithDuration:0.6 animations:^{
+            self.alpha = 0.0;
+        } completion:^(BOOL finished) {
             if (oncomplete){
                 oncomplete();
             }
-		}];
-		return;
-	}
-	self.alpha = 0;
-	[UIView animateWithDuration:0.2 animations:^{
+        }];
+        return;
+    }
+    self.alpha = 0;
+    [UIView animateWithDuration:0.2 animations:^{
         self.alpha = 1.0;
         if (oncomplete){
             oncomplete();
         }
     }];
-	self.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1.0);
-	CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
-	bounceAnimation.values = [NSArray arrayWithObjects:
-							  [NSNumber numberWithFloat:0.3],
-							  [NSNumber numberWithFloat:1.1],
-							  [NSNumber numberWithFloat:0.8],
-							  [NSNumber numberWithFloat:1.0], nil];
-	bounceAnimation.duration = 0.5;
-	bounceAnimation.removedOnCompletion = NO;
-	[self.layer addAnimation:bounceAnimation forKey:@"bounce"];
-	self.layer.transform = CATransform3DIdentity;
+    self.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1.0);
+    CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+    bounceAnimation.values = [NSArray arrayWithObjects:
+                              [NSNumber numberWithFloat:0.3],
+                              [NSNumber numberWithFloat:1.1],
+                              [NSNumber numberWithFloat:0.8],
+                              [NSNumber numberWithFloat:1.0], nil];
+    bounceAnimation.duration = 0.5;
+    bounceAnimation.removedOnCompletion = NO;
+    [self.layer addAnimation:bounceAnimation forKey:@"bounce"];
+    self.layer.transform = CATransform3DIdentity;
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
+    dispatch_async(queue, ^{
+        usleep(bounceAnimation.duration *1000);
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            if (oncomplete){
+                oncomplete();
+            }
+        });
+    });
+    
+}
+
+-(void)zoomInAppear:(void (^)(void))oncomplete{
+    [self zoomInAppearWithAlphaEffect:NO completion:^{
+        if (oncomplete) {
+            oncomplete();
+        }
+    }];
+}
+
+-(void)zoomInAppearWithAlphaEffect:(BOOL)isAlphaEffect completion:(void (^)(void))oncomplete{
+    if (isAlphaEffect){
+        self.alpha = 0;
+        [UIView animateWithDuration:0.2 animations:^{
+            self.alpha = 1.0;
+            if (oncomplete){
+                
+                oncomplete();
+            }
+        }];
+    }
+    self.layer.transform = CATransform3DMakeScale(1.15, 1.15, 1.0);
+    CAKeyframeAnimation *bounceAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+    bounceAnimation.values = @[
+                               [NSNumber numberWithFloat:1.15],
+                               [NSNumber numberWithFloat:1.0],
+                               ];
+    bounceAnimation.duration = 0.5;
+    bounceAnimation.removedOnCompletion = NO;
+    [self.layer addAnimation:bounceAnimation forKey:@"zoomIn"];
+    self.layer.transform = CATransform3DIdentity;
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0ul);
     dispatch_async(queue, ^{
         usleep(bounceAnimation.duration *1000);
@@ -122,6 +163,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 		}];
 	}];
 }
+
 -(UIView*)addSubviewToBonce:(UIView*)view{
 	return [self addSubviewToBonce:view autoSizing:NO];
 }

@@ -14,6 +14,10 @@
 @property (nonatomic, weak) id tagObjective;
 
 -(void)bouingAppear:(BOOL)appear oncomplete:(void (^)(void))oncomplete;
+
+-(void)zoomInAppear:(void (^)(void))oncomplete;
+-(void)zoomInAppearWithAlphaEffect:(BOOL)isAlphaEffect completion:(void (^)(void))oncomplete;
+
 -(void)highlight:(void (^)(void))oncomplete;
 -(UIView*)addSubviewToBonce:(UIView*)view autoSizing:(BOOL)autosize;
 -(UIView*)addSubviewToBonce:(UIView*)view;
