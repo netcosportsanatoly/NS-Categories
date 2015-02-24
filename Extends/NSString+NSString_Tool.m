@@ -326,7 +326,6 @@
 @implementation NSMutableAttributedString (NSMutableAttributedString_BOLD)
 
 -(void)setBold:(BOOL)bold range:(NSRange)range{
-    return;
     NSAttributedString *sub = [self attributedSubstringFromRange:range];
     NSDictionary *attrs = [sub attributesAtIndex:0 effectiveRange:&range];
     UIFont *font = attrs[NSFontAttributeName];
