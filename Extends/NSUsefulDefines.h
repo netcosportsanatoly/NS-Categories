@@ -21,6 +21,6 @@
     #define ALog(...) NSLog(@"%s [line %d] : %@", __PRETTY_FUNCTION__, __LINE__, [NSString stringWithFormat:__VA_ARGS__])
 #endif
 
-
+#define SWF(FORMAT,...) [NSString stringWithFormat:FORMAT,__VA_ARGS__]
 
 #endif
