@@ -11,7 +11,7 @@
 
 @implementation UIColor (UIColor_Tool)
 
-// Made by tamara nice one ;)
+#pragma mark - Class methods
 +(UIColor*)colorWithRGBString:(NSString*)rgbValue alpha:(float)alpha
 {
     NSString *colorStr;
@@ -31,7 +31,8 @@
     return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
-+(UIColor*)colorWithARGBString:(NSString *)strARGB{
++(UIColor*)colorWithARGBString:(NSString *)strARGB
+{
     if (!strARGB || [strARGB length] != 8){
         return [UIColor blackColor];
     }
@@ -45,15 +46,33 @@
     return [UIColor colorWithRGBString:strColor alpha:alpha];
 }
 
-+(UIColor*)colorWithRGB:(int)rgbValue alpha:(float)alpha{
++(UIColor*)colorWithRGB:(int)rgbValue alpha:(float)alpha
+{
 	return [UIColor  colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0  blue:((float)(rgbValue & 0xFF))/255.0 alpha:alpha];
 }
 
-+(UIColor*)colorWithRGB:(int)rgbValue {
++(UIColor*)colorWithRGB:(int)rgbValue
+{
 	return [UIColor colorWithRGB:rgbValue alpha:1.0];
 }
 
+#pragma mark - Instance methods
+- (NSString *)toRGBString
+{
+    const CGFloat *components = CGColorGetComponents(self.CGColor);
+    CGFloat r = components[0];
+    CGFloat g = components[1];
+    CGFloat b = components[2];
+    NSString *hexString=[NSString stringWithFormat:@"%02X%02X%02X", (int)(r * 255), (int)(g * 255), (int)(b * 255)];
+    return hexString;
+}
+
 - (UIColor *)colorByDarkeningColor
+{
+    return [self colorByDarkeningColorWithCoefficient:0.7f];
+}
+
+- (UIColor *)colorByDarkeningColorWithCoefficient:(CGFloat)coefficient
 {
 	// oldComponents is the array INSIDE the original color
 	// changing these changes the original, so we copy it
@@ -67,18 +86,18 @@
 		case 2:
 		{
 			//grayscale
-			newComponents[0] = oldComponents[0]*0.7;
-			newComponents[1] = oldComponents[0]*0.7;
-			newComponents[2] = oldComponents[0]*0.7;
+			newComponents[0] = oldComponents[0]*(1 - coefficient);
+			newComponents[1] = oldComponents[0]*(1 - coefficient);
+			newComponents[2] = oldComponents[0]*(1 - coefficient);
 			newComponents[3] = oldComponents[1];
 			break;
 		}
 		case 4:
 		{
 			//RGBA
-			newComponents[0] = oldComponents[0]*0.7;
-			newComponents[1] = oldComponents[1]*0.7;
-			newComponents[2] = oldComponents[2]*0.7;
+			newComponents[0] = oldComponents[0]*(1 - coefficient);
+			newComponents[1] = oldComponents[1]*(1 - coefficient);
+			newComponents[2] = oldComponents[2]*(1 - coefficient);
 			newComponents[3] = oldComponents[3];
 			break;
 		}
