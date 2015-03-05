@@ -15,7 +15,7 @@
 +(UIColor*)colorWithRGBString:(NSString*)rgbValue alpha:(float)alpha
 {
     NSString *colorStr;
-    if ([rgbValue isSubString:@"#"])
+    if ([rgbValue hasSubstring:@"#"])
         colorStr = [rgbValue stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
     else if (![rgbValue isSubString:@"0x"])
         colorStr = [NSString stringWithFormat:@"0x%@", rgbValue];
@@ -33,7 +33,11 @@
 
 +(UIColor*)colorWithARGBString:(NSString *)strARGB
 {
-    if (!strARGB || [strARGB length] != 8){
+    if ([strARGB hasSubstring:@"#"])
+        strARGB = [strARGB stringByReplacingOccurrencesOfString:@"#" withString:@""];
+
+    if (!strARGB || [strARGB length] != 8)
+    {
         return [UIColor blackColor];
     }
     NSString *strAlpha = [strARGB substringToIndex:2];
@@ -63,7 +67,9 @@
     CGFloat r = components[0];
     CGFloat g = components[1];
     CGFloat b = components[2];
-    NSString *hexString=[NSString stringWithFormat:@"%02X%02X%02X", (int)(r * 255), (int)(g * 255), (int)(b * 255)];
+    CGFloat a = components[3];
+    
+    NSString *hexString=[NSString stringWithFormat:@"%02X%02X%02X%02X", (int)(a * 255), (int)(r * 255), (int)(g * 255), (int)(b * 255)];
     return hexString;
 }
 
