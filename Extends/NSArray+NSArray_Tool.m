@@ -14,6 +14,27 @@
 
 @implementation NSArray (NSArray_Tool)
 
++ (instancetype)arrayWithArrays:(NSArray *)array, ...
+{
+    NSMutableArray *mutableArrayOfArrays = [NSMutableArray new];
+    
+    va_list args;
+    va_start(args, array);
+    
+    id arg = nil;
+    while ((arg = va_arg(args,id)))
+    {
+        if (arg && [arg isKindOfClass:[NSArray class]])
+        {
+            NSArray *tempArray = (NSArray *)arg;
+            [mutableArrayOfArrays addObjectsFromArray:tempArray];
+        }
+    }
+    va_end(args);
+    
+    return [mutableArrayOfArrays ToUnMutable];
+}
+
 +(NSArray *) getDataFromFile:(NSString *)file temps:(int)temps{
 	NSString *dest = [file toiphonedoc];
 	[NSObject dateModifiedSort:dest temps:temps];

@@ -15,7 +15,9 @@
 +(UIColor*)colorWithRGB:(int)rgbValue alpha:(float)alpha;
 +(UIColor*)colorWithRGB:(int)rgbValue ;
 
+- (NSString *)toRGBString;
 - (UIColor *)colorByDarkeningColor;
+- (UIColor *)colorByDarkeningColorWithCoefficient:(CGFloat)coefficient;
 - (UIColor *)colorByChangingAlphaTo:(CGFloat)newAlpha;
 
 @end

@@ -17,6 +17,7 @@ typedef enum{
 
 @interface NSArray (NSArray_Tool)
 
++ (instancetype)arrayWithArrays:(NSArray *)array, ...;
 +(NSArray *) getDataFromFile:(NSString *)file temps:(int)temps;
 -(void) setDataSaveNSArray:(NSString*)file ;
 -(void)setDataSaveNSArrayEmptyFileNamed:(NSString *)file;

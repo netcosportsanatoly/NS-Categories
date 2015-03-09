@@ -679,10 +679,8 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 	return self;
 }
 
-
- 
-
-- (UIImage*)screenshot {
+- (UIImage*)screenshot
+{
     if ([NSObject isRetina])
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0.0);
     else
@@ -691,21 +689,28 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    // hack, helps w/ our colors when blurring
+// hack, helps w/ our colors when blurring
 //    NSData *imageData = UIImageJPEGRepresentation(image, 1); // convert to jpeg
 //    image = [UIImage imageWithData:imageData];
     
     return image;
 }
 
+-(void)removeSubviews
+{
+    [self clearSubviews];
+}
 
--(void)clearSubview{
-	[self.subviews each:^(NSInteger index, id elt, BOOL last) {
+-(void)clearSubviews
+{
+	[self.subviews each:^(NSInteger index, id elt, BOOL last)
+    {
 		[elt removeFromSuperview];
 	}];
 }
 
--(void) resignAllResponder{
+-(void) resignAllResponder
+{
     [self visiteurView:^(UIView *elt) {
         if ([elt isFirstResponder])
             [elt resignFirstResponder];

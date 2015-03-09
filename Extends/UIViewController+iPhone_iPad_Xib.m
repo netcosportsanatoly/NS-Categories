@@ -26,7 +26,6 @@
     if (nibName == nil) {
         nibName = NSStringFromClass([self class]);
     }
-
     
     switch ([[UIDevice currentDevice] userInterfaceIdiom]) {
         case UIUserInterfaceIdiomPhone:
