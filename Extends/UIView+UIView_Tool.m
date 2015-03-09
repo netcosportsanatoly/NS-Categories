@@ -6,13 +6,12 @@
 //  Copyright (c) 2012 Jean Alexandre Iragne. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
+#import <objc/runtime.h>
 #import "UIView+UIView_Tool.h"
 #import "NSObject+NSObject_Xpath.h"
-#import "NSArray+NSArray_FastEnum.h"
 #import "NSString+NSString_Tool.h"
 #import "NSObject+NSObject_Tool.h"
-#import <objc/runtime.h>
-#import <QuartzCore/QuartzCore.h>
 
 static const char * const kParentViewControllerKey = "kParentViewControllerKey";
 static const char * const kTagObjectiveKey = "kTagObjectiveKey";
@@ -229,38 +228,46 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 	__block CGFloat w = 0;
 	__block CGFloat h = 0;
 	
-	[self.subviews each:^(NSInteger index, id elt, BOOL last) {
-		UIView *e = elt;
-		CGRect r = e.frame;
-		r.origin.x = w;
-		w += r.size.width;
-		r.origin.y = 0;
-		e.frame = r;
-		h = MAX(h, r.size.height);
-	}];
-	ret.height = h;
+    [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        UIView *e = obj;
+        CGRect r = e.frame;
+        r.origin.x = w;
+        w += r.size.width;
+        r.origin.y = 0;
+        e.frame = r;
+        h = MAX(h, r.size.height);
+    }];
+
+    ret.height = h;
 	ret.width = w;
 	
-	if([align isSubString:@"right"]){
+	if([align isSubString:@"right"])
+    {
 		CGFloat diff = self.frame.size.width - w;
-		[self.subviews each:^(NSInteger index, id elt, BOOL last) {
-			UIView *e = elt;
+        [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+         {
+			UIView *e = obj;
 			CGRect r = e.frame;
 			r.origin.x += diff ;
 			e.frame = r;
 		}];
 	}
-	if([align isSubString:@"bottom"]){
-		[self.subviews each:^(NSInteger index, id elt, BOOL last) {
-			UIView *e = elt;
+	if([align isSubString:@"bottom"])
+    {
+        [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+         {
+			UIView *e = obj;
 			CGRect r = e.frame;
 			r.origin.y = self.frame.size.height - e.frame.size.height;
 			e.frame = r;
 		}];
 	}
-	if([align isSubString:@"middle"]){
-		[self.subviews each:^(NSInteger index, id elt, BOOL last) {
-			UIView *e = elt;
+	if([align isSubString:@"middle"])
+    {
+        [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+        {
+			UIView *e = obj;
 			CGRect r = e.frame;
 			r.origin.y = self.frame.size.height/2 - e.frame.size.height/2;
 			e.frame = r;
@@ -298,28 +305,29 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     self.frame = rectchange;
     [self renderRelativeSubviewsSetMyContentScroll:YES paddings:paddings];
     __block CGFloat wm = 0;
-    [[self subviews] each:^(NSInteger index, id elt, BOOL last) {
-        UIView  *v = elt;
-        CGFloat wc = v.frame.origin.x + v.frame.size.width;
-        if(wc > wm && !v.hidden)
-            wm = wc;
-    }];
+    [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+     {
+         UIView  *v = obj;
+         CGFloat wc = v.frame.origin.x + v.frame.size.width;
+         if(wc > wm && !v.hidden)
+             wm = wc;
+     }];
     if([self isKindOfClass:[UIScrollView class]]){
         UIScrollView *elt  = (UIScrollView *)self;
         [elt setContentSize:CGSizeMake(wm, rectO.size.height)];
         [elt setShowsHorizontalScrollIndicator:isShowScollH];
     }
     self.frame = rectO;
-	return CGRectMake(rectO.origin.x, rectO.origin.y, wm, rectO.size.height);
+    return CGRectMake(rectO.origin.x, rectO.origin.y, wm, rectO.size.height);
 }
 
 -(CGRect)renderRelativeSubviewsSetMyContentScroll:(BOOL)setContent paddings:(id)paddings{
-	NSMutableArray *all = [[self subviews] ToMutable];
-	
-	NSMutableArray *l_frame = [NSMutableArray array];
-	CGFloat hall = 0;
-	CGRect prev = CGRectZero;
-	while ([all count] ) {
+    NSMutableArray *all = [[self subviews] ToMutable];
+    
+    NSMutableArray *l_frame = [NSMutableArray array];
+    CGFloat hall = 0;
+    CGRect prev = CGRectZero;
+    while ([all count] ) {
 		UIView *v = [all objectAtIndex:0];
 		if(v.hidden){
 			[all removeObjectAtIndex:0];
@@ -576,14 +584,22 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 	return CGRectMake(0,0,self.frame.size.width, hall);
 }
 
--(void)visiteurView:(void(^)(UIView *elt))cbBefore cbAfter:(void(^)(UIView *elt))cbAfter{
+-(void)visiteurView:(void(^)(UIView *elt))cbBefore cbAfter:(void(^)(UIView *elt))cbAfter
+{
     if(!cbAfter && !cbBefore)
+    {
         return;
-    if (cbBefore)cbBefore(self);
-    [[self subviews] each:^(NSInteger index, id elt, BOOL last) {
-        [elt visiteurView:cbBefore cbAfter:cbAfter];
+    }
+    if (cbBefore)
+    {
+        cbBefore(self);
+    }
+    [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        [obj visiteurView:cbBefore cbAfter:cbAfter];
     }];
-    if (cbAfter)cbAfter(self);
+    if (cbAfter)
+        cbAfter(self);
 }
 
 -(UIView*)roundShadow{
@@ -611,31 +627,35 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     return self.tag;
 }
 
--(void)replavesubview:(NSArray*)newView keepOldView:(BOOL)keepOldView{
+-(void)replavesubview:(NSArray*)newView keepOldView:(BOOL)keepOldView
+{
     __block NSMutableArray *sup = [@[] ToMutable];
     __block NSMutableArray *add = [newView ToMutable];
     //    __block NSMutableArray *replace = [@[] ToMutable];
     __block NSMutableDictionary *keyvalnew = [ @{} ToMutable];
-    [newView each:^(NSInteger index, id elt, BOOL last) {
-        UIView *v = elt;
-        keyvalnew[@(v.tag)] = elt;
+    
+    [newView enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        UIView *v = obj;
+        keyvalnew[@(v.tag)] = obj;
     }];
     
-    [[self subviews] each:^(NSInteger index, id elt, BOOL last) {
-        UIView *v = elt;
+    [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        UIView *v = obj;
         if (keyvalnew[@(v.tag)]){
             UIView *obj = keyvalnew[@(v.tag)];
             if (!keepOldView){
                 [add removeObject:obj];
                 obj.frame = v.frame;
                 [v removeFromSuperview];
-                [self insertSubview:obj atIndex:index];
+                [self insertSubview:obj atIndex:idx];
             }
         }else{
-            [sup addObject:elt];
+            [sup addObject:obj];
         }
     }];
-//    [NSObject ba]
+
     void (^__weak  r_recustion)() = nil;
     void (^__block  recustion)() = ^(){
         if ([sup count]) {
@@ -688,33 +708,28 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-// hack, helps w/ our colors when blurring
-//    NSData *imageData = UIImageJPEGRepresentation(image, 1); // convert to jpeg
-//    image = [UIImage imageWithData:imageData];
-    
+
     return image;
 }
 
 -(void)removeSubviews
 {
-    [self clearSubviews];
+    [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        [obj removeFromSuperview];
+    }];
 }
 
--(void)clearSubviews
-{
-	[self.subviews each:^(NSInteger index, id elt, BOOL last)
-    {
-		[elt removeFromSuperview];
-	}];
-}
 
 -(void) resignAllResponder
 {
-    [self visiteurView:^(UIView *elt) {
+    [self visiteurView:^(UIView *elt)
+    {
         if ([elt isFirstResponder])
             [elt resignFirstResponder];
-    } cbAfter:^(UIView *elt) {
+        
+    } cbAfter:^(UIView *elt)
+    {
         
     }];
 }

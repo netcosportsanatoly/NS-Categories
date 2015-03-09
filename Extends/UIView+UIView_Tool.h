@@ -44,7 +44,6 @@
 -(UIView*)getMasterView;
 - (UIImage*)screenshot;
 
--(void)clearSubviews;
 -(void)removeSubviews;
 -(void)resignAllResponder;
 

@@ -6,17 +6,14 @@
 //  Copyright (c) 2012 Jean Alexandre Iragne. All rights reserved.
 //
 
-#import "UIImage+UIImage_Tool.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Accelerate/Accelerate.h>
+#import "UIImage+UIImage_Tool.h"
 #import "NSObject+NSObject_Tool.h"
-#import "NSData+NSData_Tool.h"
 #import "NSObject+NSObject_File.h"
-#import "NSString+NSString_File.h"
 
 #define SQUARE(i) ((i)*(i))
 inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeof(NSInteger) * count); }
-
 
 @implementation UIImage (UIImage_Tool)
 
@@ -39,19 +36,13 @@ inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeo
     if (self != nil)
     {
         NSData* data = UIImagePNGRepresentation(self);
-        NSString *dest = [fileName toiphonedoc];
-        [data setDataSaveNSDataFile:dest];
+        [data saveObjectInDocumentFile:fileName];
     }
 }
 
-+ (UIImage*)loadImageFromFile:(NSString *)fileName inTime:(int)time
++ (UIImage*)loadImageFromFile:(NSString *)fileName withTTL:(NSUInteger)ttl
 {
-    NSString *dest = [fileName toiphonedoc];
-    [NSObject dateModifiedSort:dest temps:time];
-//	UIImage *imageFromUnardhiver = [NSKeyedUnarchiver unarchiveObjectWithFile:dest] ;
-
-    UIImage* image = [UIImage imageWithContentsOfFile:dest];
-    return image;
+    return [UIImage imageWithData:[NSObject getObjectFromDocumentFile:fileName withTTL:ttl]];
 }
 
 + (UIImage *)imageWithImage:(UIImage *)sourceImage scaledToWidth:(float)width

@@ -11,12 +11,9 @@
 
 @implementation UIApplication (UIApplication_data)
 
-+(NSString *)getItunesUrlWithAppleID:(NSString *)appleID{
++(NSString *)getItunesUrlWithAppleID:(NSString *)appleID
+{
     NSString *storeLang = [[NSObject getLangName] isEqualToString:@"fr"] ? @"fr" : @"en";
-    if ([[[NSBundle mainBundle] bundleIdentifier] isSubString:@".F1Lance"] || [[[NSBundle mainBundle] bundleIdentifier] isSubString:@".horaDoGol"]){
-        storeLang = @"br";
-    }
-    
     return [NSString stringWithFormat:@"http://itunes.apple.com/%@/app/id%@?mt=8", storeLang, appleID];
 }
 
@@ -32,9 +29,7 @@
                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"],
                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
     
-    // NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en"];
     NSLocale *locale = [NSLocale currentLocale];
-    
     NSString *language = [[locale displayNameForKey:NSLocaleIdentifier value:[NSObject getLangName]] capitalizedString];
     
     return [NSString stringWithFormat:@"%@<br>%@<br>%@",deviceInfo,appInfo,language] ;
