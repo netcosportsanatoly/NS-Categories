@@ -23,7 +23,7 @@
 + (UIImage *)colorizeImage:(UIImage *)baseImage color:(UIColor *)theColor verticalOffSet:(int)verticalOffSet;
 + (UIImage *)resizableUIImage:(UIImage *)image withCapInsets:(UIEdgeInsets)capInsets;
 
-+ (UIImage*)loadImageFromFile:(NSString *)fileName inTime:(int)time;
++ (UIImage*)loadImageFromFile:(NSString *)fileName withTTL:(NSUInteger)ttl;
 - (void)saveImageInFile:(NSString *)fileName;
 - (UIImage *)imageRotatedByDegrees:(CGFloat)degrees;
 
