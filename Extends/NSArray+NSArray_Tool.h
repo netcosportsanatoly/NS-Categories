@@ -15,11 +15,9 @@ typedef enum{
     NSCategoryDiffCompUpdate
 } NSCategoryDiffComp;
 
-
 #pragma mark - NSArray (NSArray_Tool)
-@interface NSArray (NSArray_Tool)
 
-#pragma mark Class method
+@interface NSArray (NSArray_Tool)
 
 /**
  *  It creates an instance of NSArray filled with the content of all arrays passed in the variable arguments list.
@@ -54,9 +52,30 @@ typedef enum{
  */
 -(NSArray *) sortAlphabeticallyArrayOfObjectUsing:(NSString *)keys isAsc:(BOOL)asc;
 
+/**
+ *  Check if the current NSArray constains an element which is a string and returns the value of isEqualToString:
+ *
+ *  @param stringToCompareWith The string to compare the NSArray with
+ *
+ *  @return It returns the value of isEqualToString:
+ */
 -(BOOL)containsString:(NSString *)stringToCompareWith;
 
+/**
+ *  Reverse the array
+ *
+ *  @return A new instance of a NSArray representing the reversed array of self.
+ */
 -(NSArray *)reversedArray;
+
+/**
+ *  It creates a string appending every elements of the array with a separator between each.
+ *
+ *  @param separator Separator betweend each elements in the string.
+ *
+ *  @return String representation of the array.
+ */
+-(NSString *)implode:(NSString *)separator;
 
 @end
 
@@ -64,10 +83,23 @@ typedef enum{
 #pragma mark - NSMutableArray (NSMutableArray_Tool)
 @interface NSMutableArray (NSMutableArray_Tool)
 
+/**
+ *  Reverse the current array
+ */
 -(void)reverseMutableArray;
 
+/**
+ *  Remove the objects of the array whose predicate returns YES/true.
+ *
+ *  @param predicate Predicate block called for each objects in the array
+ */
 -(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
 
+/**
+ *  Remove all string elements if isEqualToString: returns yes.
+ *
+ *  @param stringToRemove String to compare elemnts with
+ */
 -(void)removeStringIdenticalTo:(NSString *)stringToRemove;
 
 @end

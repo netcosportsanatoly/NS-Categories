@@ -9,9 +9,10 @@
 #import "NSArray+NSArray_Tool.h"
 #import "NSObject+NSObject_File.h"
 
+#pragma mark - NSArray
 @implementation NSArray (NSArray_Tool)
 
-#pragma mark - Class method
+#pragma mark Class method
 + (instancetype)arrayWithArrays:(NSArray *)array, ...
 {
     NSMutableArray *mutableArrayOfArrays = [NSMutableArray new];
@@ -33,8 +34,7 @@
     return [mutableArrayOfArrays ToUnMutable];
 }
 
-#pragma mark - Instance method
-#pragma mark Diff checking
+#pragma mark Instance method
 -(BOOL)diffForNewArrayElement:(NSArray *)newArray comp:(NSCategoryDiffComp(^)(id itemOld, id itemNew))comp complete:(void(^)(BOOL changed, NSArray *remove, NSArray *insert, NSArray *update))completed{
     __block BOOL hasChange = NO;
     NSMutableArray  *remove = [NSMutableArray new];
@@ -179,12 +179,18 @@
     {
         [array addObject:element];
     }
-    return array;
+    return [array ToUnMutable];
+}
+
+- (NSString *)implode:(NSString *)separator
+{
+    return [self componentsJoinedByString:separator];
 }
 
 @end
 
 
+#pragma mark - NSMutableArray
 @implementation NSMutableArray (NSMutableArray_Tool)
 
 - (void)reverseMutableArray

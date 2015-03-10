@@ -14,9 +14,8 @@ static NSString *NSObject_File_application_cache_folder_path = nil;
 static NSString *NSObject_File_application_temp_folder_path = nil;
 static NSString *NSObject_File_application_document_folder_path = nil;
 
-
 /**
- *  GET FOLDER PATHS (Document, Document/tmp, Cache)
+ *  GET FOLDER PATHS (Document, -Document/tmp, Cache)
  *
  */
 
@@ -59,19 +58,19 @@ static NSString *NSObject_File_application_document_folder_path = nil;
 
 #pragma mark - File paths access
 
-#pragma mark Document/
+#pragma mark -Document/
 +(NSString *)getApplicationDocumentPathForFile:(NSString *)fileName
 {
     return [[NSObject getApplicationDocumentPath] stringByAppendingPathComponent:fileName];
 }
 
-#pragma mark Cache/
+#pragma mark -Cache/
 +(NSString *)getApplicationCachePathForFile:(NSString *)fileName
 {
     return [[NSObject getApplicationCachePath] stringByAppendingPathComponent:fileName];}
 
-#pragma mark Temp/
-+(NSString *)getApplicationTempPath:(NSString *)fileName
+#pragma mark -Temp/
++(NSString *)getApplicationTempPathForFile:(NSString *)fileName
 {
     return [[NSObject getApplicationDocumentPath] stringByAppendingPathComponent:fileName];
 }
@@ -100,20 +99,20 @@ static NSString *NSObject_File_application_document_folder_path = nil;
         return nil;
 }
 
-#pragma mark Document/
+#pragma mark -Document/
 +(id) getObjectFromDocumentFile:(NSString *)fileName withTTL:(NSUInteger)ttl
 {
     return [NSObject getObjectFromFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName] withTTL:ttl];
 }
 
-#pragma mark Cache/
+#pragma mark -Cache/
 +(id) getObjectFromCacheFile:(NSString *)fileName withTTL:(NSUInteger)ttl
 {
     return [NSObject getObjectFromFileAtPath:[NSObject getApplicationCachePathForFile:fileName] withTTL:ttl];
 }
 
 
-#pragma mark Temp/
+#pragma mark -Temp/
 +(id) getObjectFromTempFile:(NSString *)fileName withTTL:(NSUInteger)ttl
 {
     return [NSObject getObjectFromFileAtPath:[NSObject getApplicationTempPathForFile:fileName] withTTL:ttl];
@@ -131,19 +130,19 @@ static NSString *NSObject_File_application_document_folder_path = nil;
     [NSKeyedArchiver archiveRootObject:self toFile:filePath];
 }
 
-#pragma mark Document/
+#pragma mark -Document/
 -(void)saveObjectInDocumentFile:(NSString *)fileName
 {
     [self saveObjectInFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName]];
 }
 
-#pragma mark Cache/
+#pragma mark -Cache/
 -(void)saveObjectInCacheFile:(NSString*)fileName
 {
     [self saveObjectInFileAtPath:[NSObject getApplicationCachePathForFile:fileName]];
 }
 
-#pragma mark Temp/
+#pragma mark -Temp/
 -(void)saveObjectInTempFile:(NSString*)fileName
 {
     [self saveObjectInFileAtPath:[NSObject getApplicationTempPathForFile:fileName]];
@@ -162,19 +161,19 @@ static NSString *NSObject_File_application_document_folder_path = nil;
     [NSKeyedArchiver archiveRootObject:nil toFile:filePath];
 }
 
-#pragma mark Document/
+#pragma mark -Document/
 +(void)emptyContentOfDocumentFile:(NSString *)fileName
 {
     [self emptyContentOfFilePath:[NSObject getApplicationDocumentPathForFile:fileName]];
 }
 
-#pragma mark Cache/
+#pragma mark -Cache/
 +(void)emptyContentOfCacheFile:(NSString *)fileName
 {
     [self emptyContentOfFilePath:[NSObject getApplicationCachePathForFile:fileName]];
 }
 
-#pragma mark Temp/
+#pragma mark -Temp/
 +(void)emptyContentOfTempFile:(NSString *)fileName
 {
     [self emptyContentOfFilePath:[NSObject getApplicationTempPathForFile:fileName]];
@@ -192,13 +191,13 @@ static NSString *NSObject_File_application_document_folder_path = nil;
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 }
 
-#pragma mark Document/
+#pragma mark -Document/
 +(void)removeDocumentFile:(NSString *)fileName
 {
     [NSObject removeFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName]];
 }
 
-#pragma mark Cache/
+#pragma mark -Cache/
 +(void)removeCacheFile:(NSString *)fileName
 {
     [NSObject removeFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName]];
@@ -219,7 +218,7 @@ static NSString *NSObject_File_application_document_folder_path = nil;
     }
 }
 
-#pragma mark Temp/
+#pragma mark -Temp/
 +(void)removeTempFile:(NSString *)fileName
 {
     [NSObject removeFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName]];
