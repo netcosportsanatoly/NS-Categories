@@ -72,7 +72,7 @@ static NSString *NSObject_File_application_document_folder_path = nil;
 #pragma mark -Temp/
 +(NSString *)getApplicationTempPathForFile:(NSString *)fileName
 {
-    return [[NSObject getApplicationDocumentPath] stringByAppendingPathComponent:fileName];
+    return [[NSObject getApplicationTempPath] stringByAppendingPathComponent:fileName];
 }
 
 +(BOOL)isFileExistingAtPath:(NSString *)filePath
@@ -200,7 +200,7 @@ static NSString *NSObject_File_application_document_folder_path = nil;
 #pragma mark -Cache/
 +(void)removeCacheFile:(NSString *)fileName
 {
-    [NSObject removeFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName]];
+    [NSObject removeFileAtPath:[NSObject getApplicationCachePathForFile:fileName]];
 }
 
 +(void)removeCacheFiles
@@ -221,7 +221,7 @@ static NSString *NSObject_File_application_document_folder_path = nil;
 #pragma mark -Temp/
 +(void)removeTempFile:(NSString *)fileName
 {
-    [NSObject removeFileAtPath:[NSObject getApplicationDocumentPathForFile:fileName]];
+    [NSObject removeFileAtPath:[NSObject getApplicationTempPathForFile:fileName]];
 }
 
 
