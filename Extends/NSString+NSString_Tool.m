@@ -313,7 +313,8 @@
         return NSOrderedAscending;
 }
 
--(NSNumber *)toNumber{
+-(NSNumber *)toNumber
+{
     NSNumberFormatter *numberFormater = [[NSNumberFormatter alloc] init];
     [numberFormater setNumberStyle:NSNumberFormatterDecimalStyle];
     NSNumber *myNumber = [numberFormater numberFromString:self];

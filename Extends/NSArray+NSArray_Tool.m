@@ -8,12 +8,11 @@
 
 #import "NSArray+NSArray_Tool.h"
 #import "NSObject+NSObject_File.h"
-#import "NSString+NSString_File.h"
-#import "NSArray+NSArray_FastEnum.h"
-#import <UIKit/UIKit.h>
 
+#pragma mark - NSArray
 @implementation NSArray (NSArray_Tool)
 
+#pragma mark Class method
 + (instancetype)arrayWithArrays:(NSArray *)array, ...
 {
     NSMutableArray *mutableArrayOfArrays = [NSMutableArray new];
@@ -35,59 +34,60 @@
     return [mutableArrayOfArrays ToUnMutable];
 }
 
-+(NSArray *) getDataFromFile:(NSString *)file temps:(int)temps{
-	NSString *dest = [file toiphonedoc];
-	[NSObject dateModifiedSort:dest temps:temps];
-	NSArray *b = [NSKeyedUnarchiver unarchiveObjectWithFile:dest] ;
-	return b;
-}
-
--(void) setDataSaveNSArray:(NSString*)file {
-	NSString *dest = [file toiphonedoc];
-	if ([self count]){
-		[NSKeyedArchiver archiveRootObject:self toFile:dest];
-	}
-}
-
--(void)setDataSaveNSArrayEmptyFileNamed:(NSString *)file{
-	NSString *dest = [file toiphonedoc];
-	[NSKeyedArchiver archiveRootObject:self toFile:dest];
-}
-
-
+#pragma mark Instance method
 -(BOOL)diffForNewArrayElement:(NSArray *)newArray comp:(NSCategoryDiffComp(^)(id itemOld, id itemNew))comp complete:(void(^)(BOOL changed, NSArray *remove, NSArray *insert, NSArray *update))completed{
     __block BOOL hasChange = NO;
     NSMutableArray  *remove = [NSMutableArray new];
     NSMutableArray  *update = [NSMutableArray new];
     NSMutableArray  *insert = [NSMutableArray new];
     
-    [newArray each:^(NSInteger index, id elt, BOOL last) {
-        BOOL stop = [self eachBreak:^BOOL(NSInteger index2, id elt2, BOOL last2) {
+    [newArray enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop)
+    {
+        __block BOOL hasStopped = NO;
+        [self enumerateObjectsUsingBlock:^(id obj2, NSUInteger index2, BOOL *stop)
+        {
             NSCategoryDiffComp res = comp(self[index2], newArray[index]);
-            if (res == NSCategoryDiffCompUpdate){
-                [update addObject:elt];
-                return YES;
+            if (res == NSCategoryDiffCompUpdate)
+            {
+                [update addObject:obj];
+                hasStopped = YES;
+                *stop = YES;
+                return;
             }
-            if (res == NSCategoryDiffCompEqual) {
-                return YES;
+            if (res == NSCategoryDiffCompEqual)
+            {
+                hasStopped = YES;
+                *stop = YES;
+                return;
             }
-            return NO;
+            hasStopped = NO;
+            *stop = NO;
+            return;
         }];
-        if (!stop)
-            [insert addObject:elt];
+        if (!hasStopped)
+            [insert addObject:obj];
     }];
     
-    [self each:^void(NSInteger index, id elt, BOOL last) {
-        BOOL stop = [newArray eachBreak:^BOOL(NSInteger index2, id elt2, BOOL last2) {
-            NSCategoryDiffComp res = comp(self[index], newArray[index2]);
-            if (res == NSCategoryDiffCompEqual || res == NSCategoryDiffCompUpdate){
-                return YES;
-            }
-            return NO;
-        }];
-        if(!stop)
-            [remove addObject:elt];
-    }];
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop)
+     {
+         __block BOOL hasStopped = NO;
+         [newArray enumerateObjectsUsingBlock:^(id obj2, NSUInteger index2, BOOL *stop)
+         {
+             NSCategoryDiffComp res = comp(self[index], newArray[index2]);
+             if (res == NSCategoryDiffCompEqual || res == NSCategoryDiffCompUpdate)
+             {
+                 hasStopped = YES;
+                 *stop = YES;
+                 return;
+             }
+             hasStopped = NO;
+             *stop = NO;
+             return;
+         }];
+         if (!hasStopped)
+             [remove addObject:obj];
+     }];
+
     hasChange = [remove count] > 0 || [insert count] > 0 || [remove count] > 0;
     completed(hasChange, remove, insert, update);
     return hasChange;
@@ -100,41 +100,60 @@
     NSMutableArray  *update = [NSMutableArray new];
     NSMutableArray  *insert = [NSMutableArray new];
     
-    [newArray each:^(NSInteger index, id elt, BOOL last) {
-        BOOL stop = [self eachBreak:^BOOL(NSInteger index2, id elt2, BOOL last2) {
-            NSCategoryDiffComp res = comp(self[index], newArray[index2]);
-            if (res == NSCategoryDiffCompUpdate){
-                [update addObject:[NSIndexPath indexPathForItem:index inSection:section]];
-                return YES;
-            }
-            if (res == NSCategoryDiffCompEqual) {
-                return YES;
-            }
-            return NO;
-        }];
-        if (!stop)
-            [insert addObject:[NSIndexPath indexPathForItem:index inSection:section]];
-    }];
+    [newArray enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop)
+     {
+         __block BOOL hasStopped = NO;
+         [self enumerateObjectsUsingBlock:^(id obj2, NSUInteger index2, BOOL *stop)
+          {
+              NSCategoryDiffComp res = comp(self[index2], newArray[index]);
+              if (res == NSCategoryDiffCompUpdate)
+              {
+                  [update addObject:[NSIndexPath indexPathForItem:index inSection:section]];
+                  hasStopped = YES;
+                  *stop = YES;
+                  return;
+              }
+              if (res == NSCategoryDiffCompEqual)
+              {
+                  hasStopped = YES;
+                  *stop = YES;
+                  return;
+              }
+              hasStopped = NO;
+              *stop = NO;
+              return;
+          }];
+         if (!hasStopped)
+             [insert addObject:[NSIndexPath indexPathForItem:index inSection:section]];
+     }];
     
-    [self each:^void(NSInteger index, id elt, BOOL last) {
-        BOOL stop = [newArray eachBreak:^BOOL(NSInteger index2, id elt2, BOOL last2) {
-            NSCategoryDiffComp res = comp(self[index2], newArray[index]);
-            if (res == NSCategoryDiffCompEqual || res == NSCategoryDiffCompUpdate){
-                return YES;
-            }
-            return NO;
-        }];
-        if(!stop)
-            [remove addObject:[NSIndexPath indexPathForItem:index inSection:section]];
-    }];
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop)
+     {
+         __block BOOL hasStopped = NO;
+         [newArray enumerateObjectsUsingBlock:^(id obj2, NSUInteger index2, BOOL *stop)
+          {
+              NSCategoryDiffComp res = comp(self[index], newArray[index2]);
+              if (res == NSCategoryDiffCompEqual || res == NSCategoryDiffCompUpdate)
+              {
+                  hasStopped = YES;
+                  *stop = YES;
+                  return;
+              }
+              hasStopped = NO;
+              *stop = NO;
+              return;
+          }];
+         if(!hasStopped)
+             [remove addObject:[NSIndexPath indexPathForItem:index inSection:section]];
+     }];
     hasChange = [remove count] > 0 || [insert count] > 0 || [remove count] > 0;
     completed(hasChange, remove, insert, update);
     return hasChange;
 }
 
--(NSArray *) sortAlphabeticallyArrayOfObjectUsing:(NSString *)key isAsc:(BOOL)asc
+-(NSArray *) sortAlphabeticallyArrayOfObjectUsing:(NSString *)keys isAsc:(BOOL)asc
 {
-    NSSortDescriptor *brandDescriptor = [[NSSortDescriptor alloc] initWithKey:key ascending:asc];
+    NSSortDescriptor *brandDescriptor = [[NSSortDescriptor alloc] initWithKey:keys ascending:asc];
     return [self sortedArrayUsingDescriptors:@[brandDescriptor]];
 }
 
@@ -152,53 +171,30 @@
     return returnedValue;
 }
 
-@end
-
-
-@implementation NSArray (Reverse)
-
-- (NSArray *)reversedArray {
+- (NSArray *)reversedArray
+{
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:[self count]];
     NSEnumerator *enumerator = [self reverseObjectEnumerator];
-    for (id element in enumerator) {
+    for (id element in enumerator)
+    {
         [array addObject:element];
     }
-    return array;
+    return [array ToUnMutable];
+}
+
+- (NSString *)implode:(NSString *)separator
+{
+    return [self componentsJoinedByString:separator];
 }
 
 @end
 
 
+#pragma mark - NSMutableArray
+@implementation NSMutableArray (NSMutableArray_Tool)
 
-@implementation NSMutableArray (Save)
-
-+(NSMutableArray *) getDataFromFile:(NSString *)file temps:(int)temps{
-	NSString *dest = [file toiphonedoc];
-	[NSObject dateModifiedSort:dest temps:temps];
-	NSMutableArray *b = [NSKeyedUnarchiver unarchiveObjectWithFile:dest] ;
-	return b;
-}
-
--(void) setDataSaveNSArray:(NSString*)file {
-	NSString *dest = [file toiphonedoc];
-	if ([self  count]){
-		[NSKeyedArchiver archiveRootObject:self toFile:dest];
-	}
-}
-
--(void)setDataSaveNSArrayEmptyFileNamed:(NSString *)file{
-	NSString *dest = [file toiphonedoc];
-	[NSKeyedArchiver archiveRootObject:self toFile:dest];
-}
-
-@end
-
-
-
-
-@implementation NSMutableArray (Reverse)
-
-- (void)reverseMutableArray {
+- (void)reverseMutableArray
+{
     if ([self count] == 0)
         return;
     NSUInteger i = 0;
@@ -211,10 +207,6 @@
         j--;
     }
 }
-
-@end
-
-@implementation NSMutableArray (NSMutableArray_Tool)
 
 -(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate
 {
