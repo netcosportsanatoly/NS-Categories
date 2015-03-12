@@ -238,8 +238,9 @@ static NSString *NSObject_File_application_document_folder_path = nil;
                                        error:nil];
     
 	NSDate *modificationDate = attributesForFile[NSFileModificationDate];
-	NSDate *currentDate = [NSDate dateWithTimeIntervalSinceNow:-(ttl)];
-	if ([modificationDate compare:currentDate] == NSOrderedDescending || modificationDate == nil)
+    NSDate *currentDate = [NSDate date];
+	NSDate *currentDateMinusTTL = [NSDate dateWithTimeIntervalSince1970:([currentDate timeIntervalSince1970] - ttl)];
+	if ([modificationDate compare:currentDateMinusTTL] == NSOrderedDescending || modificationDate == nil)
 		return 0;
 	[[NSFileManager defaultManager] removeItemAtPath:fileName error:nil];
 	return 1;
