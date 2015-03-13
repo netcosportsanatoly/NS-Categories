@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@interface UIView (Gradients)
+
++ (UIView *) gradientViewForRect:(CGRect)rect andColors:(NSArray *)colors;
++ (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor startingRatio:(int)startRatio endingColor:(UIColor *)endColor andEndingRatio:(int)endRatio;
+
++ (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor andEndingColor:(UIColor *)endColor;
+
+@end
+
 @interface UIView (UIView_Tool)
 
 @property (nonatomic, weak) UIViewController *parentViewController;
