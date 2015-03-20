@@ -7,6 +7,7 @@
 //
 
 #import "NSObject+NSObject_File.h"
+#import "NSUsefulDefines.h"
 
 @implementation NSObject (NSObject_File)
 

@@ -6,8 +6,10 @@
 //  Copyright (c) 2012 Jean Alexandre Iragne. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "NSArray+NSArray_Tool.h"
 #import "NSObject+NSObject_File.h"
+#import "NSObject+NSObject_Xpath.h"
 
 #pragma mark - NSArray
 @implementation NSArray (NSArray_Tool)
