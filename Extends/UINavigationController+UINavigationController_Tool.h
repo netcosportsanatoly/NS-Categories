@@ -11,5 +11,6 @@
 @interface UINavigationController (UINavigationController_Tool)
 
 -(NSArray *) popToViewControllerClass:(Class)viewControllerClass animated:(BOOL)animated;
+-(UIViewController *) rootViewController;
 
 @end
