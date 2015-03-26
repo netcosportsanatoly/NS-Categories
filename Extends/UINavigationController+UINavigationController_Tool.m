@@ -30,4 +30,9 @@
     return nil;
 }
 
+-(UIViewController *) rootViewController
+{
+    return self.viewControllers.firstObject;
+}
+
 @end
