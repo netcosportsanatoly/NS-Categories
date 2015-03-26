@@ -78,28 +78,3 @@ typedef enum{
 -(NSString *)implode:(NSString *)separator;
 
 @end
-
-
-#pragma mark - NSMutableArray (NSMutableArray_Tool)
-@interface NSMutableArray (NSMutableArray_Tool)
-
-/**
- *  Reverse the current array
- */
--(void)reverseMutableArray;
-
-/**
- *  Remove the objects of the array whose predicate returns YES/true.
- *
- *  @param predicate Predicate block called for each objects in the array
- */
--(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
-
-/**
- *  Remove all string elements if isEqualToString: returns yes.
- *
- *  @param stringToRemove String to compare elemnts with
- */
--(void)removeStringIdenticalTo:(NSString *)stringToRemove;
-
-@end
