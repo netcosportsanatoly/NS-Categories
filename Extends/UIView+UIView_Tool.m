@@ -769,4 +769,29 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     return view;
 }
 
++ (void) gradientForView:(UIView *)view startingColor:(UIColor *)startColor startingRatio:(NSUInteger)startRatio endingColor:(UIColor *)endColor andEndingRatio:(NSUInteger)endRatio {
+    CAGradientLayer *gradient = [CAGradientLayer layer];
+    gradient.frame = view.bounds;
+    
+    NSMutableArray *colorsMut = [[NSMutableArray alloc] init];
+
+    for (int index = 0; index < startRatio; index++) {
+        [colorsMut addObject:startColor];
+    }
+    
+    for (int index = 0; index < endRatio; index++) {
+        [colorsMut addObject:endColor];
+    }
+    
+    NSMutableArray *cgcolorsMut = [[NSMutableArray alloc] init];
+    for (UIColor *color in colorsMut) {
+        [cgcolorsMut addObject:(id)[color CGColor]];
+    }
+    
+    gradient.colors = cgcolorsMut;
+    
+    [view.layer insertSublayer:gradient atIndex:0];
+}
+
+
 @end

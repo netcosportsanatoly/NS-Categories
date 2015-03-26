@@ -15,6 +15,7 @@
 
 + (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor andEndingColor:(UIColor *)endColor;
 
++ (void) gradientForView:(UIView *)view startingColor:(UIColor *)startColor startingRatio:(NSUInteger)startRatio endingColor:(UIColor *)endColor andEndingRatio:(NSUInteger)endRatio;
 @end
 
 @interface UIView (UIView_Tool)
