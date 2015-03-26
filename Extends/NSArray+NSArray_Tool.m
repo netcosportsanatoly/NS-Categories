@@ -6,8 +6,10 @@
 //  Copyright (c) 2012 Jean Alexandre Iragne. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "NSArray+NSArray_Tool.h"
 #import "NSObject+NSObject_File.h"
+#import "NSObject+NSObject_Xpath.h"
 
 #pragma mark - NSArray
 @implementation NSArray (NSArray_Tool)
@@ -185,51 +187,6 @@
 - (NSString *)implode:(NSString *)separator
 {
     return [self componentsJoinedByString:separator];
-}
-
-@end
-
-
-#pragma mark - NSMutableArray
-@implementation NSMutableArray (NSMutableArray_Tool)
-
-- (void)reverseMutableArray
-{
-    if ([self count] == 0)
-        return;
-    NSUInteger i = 0;
-    NSUInteger j = [self count] - 1;
-    while (i < j) {
-        [self exchangeObjectAtIndex:i
-                  withObjectAtIndex:j];
-        
-        i++;
-        j--;
-    }
-}
-
--(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate
-{
-    NSIndexSet *setOfIndexesToRemove = [self indexesOfObjectsPassingTest:predicate];
-    
-    if (setOfIndexesToRemove && [setOfIndexesToRemove count] > 0)
-    {
-        [self removeObjectsAtIndexes:setOfIndexesToRemove];
-    }
-}
-
--(void)removeStringIdenticalTo:(NSString *)stringToRemove
-{
-    if (!stringToRemove)
-        return ;
-
-    [self removeObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop)
-    {
-        if (obj && [obj isKindOfClass:[NSString class]] && [obj isEqualToString:stringToRemove])
-            return YES;
-        else
-            return NO;
-    }];
 }
 
 @end

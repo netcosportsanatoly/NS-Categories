@@ -7,6 +7,7 @@
 //
 
 #import "NSDictionary+NSDictionary_Tool.h"
+#import "NSObject+NSObject_Xpath.h"
 
 @implementation NSDictionary (NSDictionary_Tool)
 
