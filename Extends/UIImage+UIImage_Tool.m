@@ -114,6 +114,9 @@ inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeo
 
 + (UIImage *)colorizeImage:(UIImage *)baseImage color:(UIColor *)theColor
 {
+    if (!baseImage)
+        return nil;
+    
 	UIGraphicsBeginImageContextWithOptions(baseImage.size, NO, 0.0f);
 	
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
