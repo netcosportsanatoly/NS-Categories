@@ -59,12 +59,14 @@
 		block();
 	});
 }
-+(void)backGroundBlock:(void (^)())block{
-	if (![NSThread isMainThread]){
+
++(void)backGroundBlock:(void (^)())block
+{
+	if (![NSThread isMainThread])
+    {
 		block();
 		return;
 	}
-
 	static dispatch_queue_t ar_queue[D_MAX_BG_QUEUE];
 	static dispatch_once_t onceToken;
 	srand((unsigned int)time(NULL));
@@ -79,7 +81,9 @@
 		block();
 	});
 }
-+(void)mainThreadBlock:(void (^)())block{
+
++(void)mainThreadBlock:(void (^)())block
+{
 	// safe if main thread run
 	if ([NSThread isMainThread]){
 		block();
@@ -89,42 +93,25 @@
 		block();
 	});
 }
-+(BOOL)isRetina{
-	if ([UIScreen instancesRespondToSelector:@selector(scale)]) {
-        CGFloat scale = [[UIScreen mainScreen] scale];
-        if (scale > 1.0) {
-            return YES;
-        }
-    }
-	return NO;
-}
--(void)NSObject_Tool:(void(^)())block{
+
+-(void)NSObject_Tool:(void(^)())block
+{
 	block();
 }
--(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block{
+
+-(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block
+{
 	[self performSelector:@selector(NSObject_Tool:) withObject:[block copy] afterDelay:time];
 }
 
-
-__strong static NSString *getVerionsiOS_systemVersion = nil;
-
-+(int)getVerionsiOS{
-	if (getVerionsiOS_systemVersion == nil)
-		getVerionsiOS_systemVersion = [[UIDevice currentDevice] systemVersion];
-	NSString *sysv = getVerionsiOS_systemVersion;
-	int valssys = 0;
-	if ([sysv length] > 1)
-		sysv = [sysv substringToIndex:1];
-	valssys = [sysv intValue];
-	return valssys;
-}
-+(BOOL)isUniversalApplication{
++(BOOL)isUniversalApplication
+{
     NSArray *deviceFamily =[[[NSBundle mainBundle] infoDictionary] valueForKey:@"UIDeviceFamily"];
 	return [deviceFamily count]==2;
 }
 
-
--(NSDictionary *)serializeToDictionary{
+-(NSDictionary *)serializeToDictionary
+{
     Class clazz = [self class];
     u_int count;
     objc_property_t* properties = class_copyPropertyList(clazz, &count);

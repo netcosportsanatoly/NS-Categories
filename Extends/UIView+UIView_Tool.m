@@ -12,6 +12,7 @@
 #import "NSObject+NSObject_Xpath.h"
 #import "NSString+NSString_Tool.h"
 #import "NSObject+NSObject_Tool.h"
+#import "UIDevice+UIDevice_Tool.h"
 
 static const char * const kParentViewControllerKey = "kParentViewControllerKey";
 static const char * const kTagObjectiveKey = "kTagObjectiveKey";
@@ -701,7 +702,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 
 - (UIImage*)screenshot
 {
-    if ([NSObject isRetina])
+    if ([UIDevice isRetina])
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, NO, 0.0);
     else
         UIGraphicsBeginImageContext(self.bounds.size);

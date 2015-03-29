@@ -11,6 +11,7 @@
 #import "UIImage+UIImage_Tool.h"
 #import "NSObject+NSObject_Tool.h"
 #import "NSObject+NSObject_File.h"
+#import "UIDevice+UIDevice_Tool.h"
 
 #define SQUARE(i) ((i)*(i))
 inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeof(NSInteger) * count); }
@@ -101,12 +102,15 @@ inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeo
     return im;
 }
 
-+ (UIImage *)resizableUIImage:(UIImage *)image withCapInsets:(UIEdgeInsets)capInsets{
++ (UIImage *)resizableUIImage:(UIImage *)image withCapInsets:(UIEdgeInsets)capInsets
+{
     UIImage *im = nil;
-    if ([NSObject getVerionsiOS] >= 5){
+    if ([UIDevice getVerionsiOS] >= 5)
+    {
         im = [image resizableImageWithCapInsets:capInsets];
     }
-    else {
+    else
+    {
         im = [image stretchableImageWithLeftCapWidth:capInsets.left topCapHeight:capInsets.top];
     }
     return im;

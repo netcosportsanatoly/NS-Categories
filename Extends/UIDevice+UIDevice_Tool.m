@@ -15,11 +15,7 @@
 
 @implementation UIDevice (UIDevice_Tool)
 
-
-
-////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 // Return the local MAC addy
 // Courtesy of FreeBSD hackers email list
@@ -86,8 +82,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Public Methods
-
-- (NSString *) uniqueDeviceIdentifier{
+- (NSString *) uniqueDeviceIdentifier
+{
     NSString *macaddress = [[UIDevice currentDevice] macaddress];
 	if (!macaddress)
 		return @"";
@@ -97,7 +93,8 @@
     return uniqueIdentifier;
 }
 
-- (NSString *) uniqueGlobalDeviceIdentifier{
+- (NSString *) uniqueGlobalDeviceIdentifier
+{
     // New for > iOS 6
     NSString *uniqueIdentifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 	if (!uniqueIdentifier)
@@ -112,18 +109,32 @@
     //    return uniqueIdentifier;
 }
 
-
-+(BOOL)isIPAD{
++(BOOL)isIPAD
+{
 	NSString * model = [[UIDevice currentDevice] model];
 	return [model isSubString:@"iPad"];
 }
-+(BOOL)isOrientationPortrait{
+
++(BOOL)isOrientationPortrait
+{
     if ([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown)
         return YES;
     return NO;
 }
-+(CGRect)getScreenFrame{
+
++(CGRect)getScreenFrame
+{
 	return CGRectMake([UIScreen mainScreen].bounds.origin.x, [UIScreen mainScreen].bounds.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+}
+
++(BOOL) isIphone6Plus
+{
+    return [UIDevice getScreenFrame].size.height == 736 ? YES : NO;
+}
+
++(BOOL) isIphone6
+{
+    return [UIDevice getScreenFrame].size.height == 667 ? YES : NO;
 }
 
 +(BOOL) isIphone5
@@ -134,6 +145,19 @@
 +(BOOL) isIphone4
 {
     return [UIDevice getScreenFrame].size.height == 480 ? YES : NO;
+}
+
++(BOOL)isRetina
+{
+    if ([UIScreen instancesRespondToSelector:@selector(scale)])
+    {
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        if (scale > 1.0)
+        {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (NSString *)getDeviceType
@@ -180,8 +204,21 @@
         return @"Simulator";
     if ([platform isEqualToString:@"x86_64"])
         return @"Simulator";
-
     return platform;
+}
+
+__strong static NSString *getVerionsiOS_systemVersion = nil;
+
++(int)getVerionsiOS
+{
+    if (getVerionsiOS_systemVersion == nil)
+        getVerionsiOS_systemVersion = [[UIDevice currentDevice] systemVersion];
+    NSString *sysv = getVerionsiOS_systemVersion;
+    int valssys = 0;
+    if ([sysv length] > 1)
+        sysv = [sysv substringToIndex:1];
+    valssys = [sysv intValue];
+    return valssys;
 }
 
 @end

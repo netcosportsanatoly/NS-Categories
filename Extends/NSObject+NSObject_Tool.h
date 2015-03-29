@@ -16,9 +16,8 @@
 +(void)backGroundBlockDownload:(void (^)())block;
 +(void)backGroundBlock:(void (^)())block;
 +(void)mainThreadBlock:(void (^)())block;
-+(BOOL)isRetina;
+
 -(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block;
-+(int)getVerionsiOS;
 +(BOOL)isUniversalApplication;
 
 -(NSDictionary *)serializeToDictionary;
