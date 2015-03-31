@@ -12,22 +12,25 @@
 
 +(NSDate *) dateWithISO8601String:(NSString *)dateTimeZFormat;
 {
+// 2013-11-18T23:00:00.324Z
+// [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    // 2013-11-18T23:00:00.324Z
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     formatter.locale = [NSLocale systemLocale];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
-    return [formatter dateFromString:dateTimeZFormat];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
+    NSDate *date = [formatter dateFromString:dateTimeZFormat];
+    return date;
 }
 
 +(NSString *) stringWithISO8601Date:(NSDate *)dateTime
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    // 2013-11-18T23:00:00.324Z
     formatter.locale = [NSLocale systemLocale];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
-    return [formatter stringFromDate:dateTime];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
+    NSString *stringFromDate = [formatter stringFromDate:dateTime];
+    return stringFromDate;
 }
 
 @end

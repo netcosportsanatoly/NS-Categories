@@ -11,17 +11,23 @@
 @interface NSObject (NSObject_Xpath)
 
 -(id)getXpath:(NSString*)xpath type:(Class)type def:(id)def;
--(NSString *)getXpathEmptyString:(NSString*)xpath;
--(NSString *)getXpathIntegerToString:(NSString*)xpath;
--(int)getXpathInteger:(NSString*)xpath;
--(long)getXpathLong:(NSString*)xpath;
 -(id)getXpathNil:(NSString*)xpath type:(Class)type;
+
+-(NSString *)getXpathEmptyString:(NSString*)xpath;
 -(NSString *)getXpathNilString:(NSString*)xpath;
+
+-(NSString *)getXpathIntegerToString:(NSString*)xpath;
+-(NSInteger)getXpathInteger:(NSString*)xpath;
+-(NSUInteger)getXpathUInteger:(NSString*)xpath;
+-(long)getXpathLong:(NSString*)xpath;
+-(BOOL)getXpathBool:(NSString*)xpath defaultValue:(BOOL)defaultValue;
+
 -(NSDictionary *)getXpathNilDictionary:(NSString*)xpath;
+
 -(NSArray*)getXpathNilArray:(NSString*)xpath;
 -(NSArray*)getXpathEmptyArray:(NSString*)xpath;
--(BOOL)getXpathBool:(NSString*)xpath defaultValue:(BOOL)defaultValue;
 
 -(id)ToMutable;
 -(id)ToUnMutable;
+
 @end

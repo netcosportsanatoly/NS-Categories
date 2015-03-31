@@ -153,23 +153,26 @@
 	NSString *r = nil;
 	return [self getXpath:xpath type:type def:def obj:self restXpath:&r];
 }
+
 -(NSString *)getXpathEmptyString:(NSString*)xpath{
 	return [self getXpath:xpath type:[NSString class] def:@""];
 }
+
 -(NSString *)getXpathIntegerToString:(NSString*)xpath{
 	return [NSString stringWithFormat:@"%d", [[self getXpath:xpath type:[NSNumber class] def:@0] intValue]];
 }
 
--(int)getXpathInteger:(NSString*)xpath{
+-(NSInteger)getXpathInteger:(NSString*)xpath{
 	return [[self getXpath:xpath type:[NSNumber class] def:@0] intValue];
+}
+
+-(NSUInteger)getXpathUInteger:(NSString*)xpath{
+    return [[self getXpath:xpath type:[NSNumber class] def:@0] unsignedIntegerValue];
 }
 
 -(long)getXpathLong:(NSString*)xpath{
 	return [[self getXpath:xpath type:[NSNumber class] def:@0] longValue];
 }
-//-(id)getXpathDoubleToString:(NSString*)xpath{
-//	return [NSString stringWithFormat:@"%f", [[self getXpath:xpath type:[NSNumber class] def:[NSNumber numberWithD:0]] intValue]];
-//}
 
 -(id)getXpathNil:(NSString*)xpath type:(Class)type{
 	return [self getXpath:xpath type:type def:nil];
