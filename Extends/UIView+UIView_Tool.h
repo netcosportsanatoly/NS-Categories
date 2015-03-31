@@ -8,15 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (Gradients)
-
-+ (UIView *) gradientViewForRect:(CGRect)rect andColors:(NSArray *)colors;
-+ (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor startingRatio:(int)startRatio endingColor:(UIColor *)endColor andEndingRatio:(int)endRatio;
-
-+ (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor andEndingColor:(UIColor *)endColor;
-
-+ (void) gradientForView:(UIView *)view startingColor:(UIColor *)startColor startingRatio:(NSUInteger)startRatio endingColor:(UIColor *)endColor andEndingRatio:(NSUInteger)endRatio;
-@end
+static NSString *kUIViewGradientColorkey = @"kUIViewGradientColorkey";
+static NSString *kUIViewGradientColorIterations = @"kUIViewGradientColorIterations";
 
 @interface UIView (UIView_Tool)
 
@@ -56,5 +49,12 @@
 
 -(void)removeSubviews;
 -(void)resignAllResponder;
+
+#pragma mark - Gradients
++(UIView *) viewWithFrame:(CGRect)frame andGradients:(NSArray *)gradients onFrame:(CGRect)gradientFrame;
++(UIView *) viewWithFrame:(CGRect)frame startColor:(UIColor *)startColor andEndColor:(UIColor *)endColor;
+-(void) applyGradients:(NSArray *)gradients onFrame:(CGRect)gradientFrame;
+-(void) applyGradients:(NSArray *)gradients;
+-(void) applyGradientsWithStartColor:(UIColor *)startColor andEndColor:(UIColor *)endColor;
 
 @end
