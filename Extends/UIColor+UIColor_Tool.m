@@ -17,7 +17,7 @@
     NSString *colorStr;
     if ([rgbValue hasSubstring:@"#"])
         colorStr = [rgbValue stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
-    else if (![rgbValue isSubString:@"0x"])
+    else if (![rgbValue hasSubstring:@"0x"])
         colorStr = [NSString stringWithFormat:@"0x%@", rgbValue];
     else
         colorStr = rgbValue;

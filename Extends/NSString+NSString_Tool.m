@@ -139,25 +139,6 @@
         return [self rangeOfString:search options:mask];
 }
 
-/*
- ** This is not actually making a "isSubstring"
- ** Please use hasSubstring instead. It makes MORE SENSE :)
- */
--(BOOL) isSubString:(NSString*) search
-{
-    return [self hasSubstring:search];
-}
-
--(BOOL) isSubStringOf:(NSString*) search
-{
-    return [search hasSubstring:self];
-}
-
--(BOOL) isInsensitiveSubStringOf:(NSString *)search
-{
-    return [search hasInsensitiveSubString:self];
-}
-
 -(BOOL) hasSubstring:(NSString *)search
 {
 	if (!search)
@@ -183,58 +164,69 @@
 -(NSInteger) indexOfSubString:(NSString*) search
 {
 	if (!search)
-		return -1;
+		return NSNotFound;
 	NSRange r = [self rangeOfSubString:search withOptions:NSLiteralSearch];
 	return r.location;
 }
 
-- (NSString*)strReplace:(NSString*)r to:(NSString*)t
+-(NSString*) strReplace:(NSString*)source by:(NSString*)newString
 {
 	NSMutableString *str = [NSMutableString stringWithString:self];
-	[ str replaceOccurrencesOfString:r
-						  withString:t
+	[ str replaceOccurrencesOfString:source
+						  withString:newString
 							 options:0
-							   range:NSMakeRange(0, [str length])
+							   range:NSMakeRange(0, [source length])
 	 ];
 	return str;
 }
 
 
--(NSString *) urlencode{
+-(NSString *) urlencode
+{
     return [[NSString stringWithString:self] stringByAddingPercentEscapesUsingEncoding:(NSUTF8StringEncoding)];
 }
--(NSString*)trim{
+
+-(NSString*)trim
+{
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
--(BOOL)isNotEqualToString:(NSString*)str{
+
+-(BOOL)isNotEqualToString:(NSString*)str
+{
 	return ![self isEqualToString:str];
 }
 
--(NSArray*)explode:(NSString*)sep{
+-(NSArray*)explode:(NSString*)sep
+{
 	NSArray *words = [self componentsSeparatedByString:sep];
 	return words;
 }
 
-
--(id)StrTrFromData:(NSString*)from to:(NSString*)to{
-	if ([self isKindOfClass:[NSString class]]){
+-(id)StrTrFromData:(NSString*)from to:(NSString*)to
+{
+	if ([self isKindOfClass:[NSString class]])
+    {
 		NSMutableString * s = [[NSMutableString alloc] init];
-		[s appendString:[(NSString*)self strReplace:from to:to]];
+		[s appendString:[(NSString*)self strReplace:from by:to]];
 		return s;
 	}
-	if ([self isKindOfClass:[NSArray class]]){
+	if ([self isKindOfClass:[NSArray class]])
+    {
 		NSArray *a = (NSArray *)self;
 		NSMutableArray *ar = [[NSMutableArray alloc] init];
-		for (id e in a) {
+		for (id e in a)
+        {
 			id ee = [e StrTrFromData:from to:to];
 			[ar addObject:ee];
 		}
 		return ar;
 	}
-	if ([self isKindOfClass:[NSDictionary class]]){
+	if ([self isKindOfClass:[NSDictionary class]])
+    {
 		NSDictionary *a = (NSDictionary *)self;
 		NSMutableDictionary *ar = [[NSMutableDictionary alloc] init];
-		for (id k in [a allKeys]) {
+		for (id k in [a allKeys])
+        {
 			id e = a[k];
 			id ee = [e StrTrFromData:from to:to];
 			id kk = [k StrTrFromData:from to:to];
@@ -245,7 +237,8 @@
 	return self;
 }
 
--(NSArray*)componentsMatchedByRegex:(NSString*)regex{
+-(NSArray*)componentsMatchedByRegex:(NSString*)regex
+{
 	NSRegularExpression* reg = [[NSRegularExpression alloc] initWithPattern:regex options:NSRegularExpressionCaseInsensitive error:nil];
 	NSArray* imgBalises = [reg matchesInString:self options:0 range:NSMakeRange(0, [self length])];
 	NSString* contentCopy = [self copy];
@@ -259,21 +252,16 @@
 	return ar;
 }
 
--(id)regexMatch:(NSString*)pattern{
-	NSArray *links = [self componentsMatchedByRegex:pattern];
-	if ([links count] <= 0)
-		return nil;
-	return links;
-}
-
--(NSString *)ucfirst{
+-(NSString *)ucfirst
+{
     if (!self || ![self isKindOfClass:[NSString class]] || [self length] < 1){
         return @"";
     }
     return [self stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[self substringToIndex:1] uppercaseString]];
 }
 
--(NSString *)ucfirstlc{
+-(NSString *)ucfirstlc
+{
     if (!self || ![self isKindOfClass:[NSString class]] || [self length] < 1){
         return @"";
     }
@@ -281,10 +269,11 @@
     return [str stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:[[str substringToIndex:1] uppercaseString]];
 }
 
-+(BOOL)validateEmail:(NSString *)candidate{
+-(BOOL)validateEmail
+{
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
-    return [emailTest evaluateWithObject:candidate];
+    return [emailTest evaluateWithObject:self];
 }
 
 - (NSComparisonResult)compareToVersion:(NSString *)version
@@ -331,7 +320,7 @@
     NSDictionary *attrs = [sub attributesAtIndex:0 effectiveRange:&range];
     UIFont *font = attrs[NSFontAttributeName];
     if (font){
-        if ([font.fontName isSubString:@"-Bold"])
+        if ([font.fontName hasSubstring:@"-Bold"])
             return;
         NSString *fontName = [NSString stringWithFormat:@"%@-Bold", font.fontName];
         UIFont *fontBold = [UIFont fontWithName:fontName size:font.pointSize];

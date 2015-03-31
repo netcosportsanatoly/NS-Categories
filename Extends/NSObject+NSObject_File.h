@@ -90,6 +90,8 @@
  *  @return 1 if the file has been removed, 0 if not.
  */
 #pragma mark - TTL Checking
-+(NSInteger)dateModifiedSort:(NSString *)fileName withTTL:(NSUInteger)ttl;
++(NSInteger)dateModifiedSortFile:(NSString *)filePath withTTL:(NSUInteger)ttl andRemove:(BOOL)shouldRemove;
+
++(BOOL)file:(NSString *)filePath hasBeenModifiedBeforeNowMinusTTL:(NSUInteger)ttl;
 
 @end

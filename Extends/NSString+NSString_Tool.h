@@ -10,70 +10,149 @@
 
 @interface NSString (NSString_Tool)
 
+// ABOUT TO BE DOCUMENTED:
 -(NSData *) obfuscatewithKey:(NSString *)key;
--(NSInteger) nbrOccurenceString:(NSString *)parse;
--(NSString *) md5;
--(NSString *) sha1;
--(NSString *)sha1Hmac:(NSString *)key;
+-(id) StrTrFromData:(NSString*)from to:(NSString*)to;
+
+
+
+/**
+ *  Check if parts of self respond to the given regular expression
+ *
+ *  @param `regex' Regular Expression
+ *
+ *  @return Self's signature
+ */
+-(NSArray*)componentsMatchedByRegex:(NSString*)regex;
+
+/**
+ *  Compute self signature [MD5/SHA1/SHA1/SHA1HMAC]
+ *
+ *  @return Self's signature
+ */
+-(NSString *)   md5;
+-(NSString *)   sha1;
+-(NSString *)   sha1Hmac:(NSString *)key;
+
+/**
+ *  Cycli Redundancy Check
+ *
+ *  @return Unsigned long representing self
+ */
 -(unsigned long)crc32;
 
-
-/*!
- @abstract
- know if a string have a sub string in parametter
- 
- @param search
- substring to search
- 
- @discussion
- Non-sense, use hasSubstring instead.
+/**
+ *  Check if self has at least one substring like `seach' (Case sensitive)
+ *
+ *  @param `search' String to find
+ *
+ *  @return Yes is `search' has been found, NO if not.
  */
--(BOOL) isSubString:(NSString*) search;
-
--(BOOL) isSubStringOf:(NSString*) search;
 -(BOOL) hasSubstring:(NSString *)search;
 
--(BOOL) isInsensitiveSubStringOf:(NSString *)search;
+/**
+ *  Check if self has at least one substring like `seach' (Case snsensitive)
+ *
+ *  @param `search' String to find
+ *
+ *  @return Yes is `search' has been found, NO if not.
+ */
 -(BOOL) hasInsensitiveSubString:(NSString *)search;
+
+/**
+ *  Check if self has at least one substring like `seach' (Case snsensitive)
+ *
+ *  @param `search' String to find
+ *
+ *  @return Index of `search' if is has been found, NSNotFound if not.
+ */
 -(NSInteger) indexOfSubString:(NSString*) search;
 
--(NSString*) strReplace:(NSString*)r to:(NSString*)t;
+/**
+ *  Compute the number of occurences of a string in self.
+ *
+ *  @param `search' String to find
+ *
+ *  @return number of found occurences.
+ */
+-(NSInteger) nbrOccurenceString:(NSString *)search;
+
+/**
+ *  Check if self has at least one substring like `seach' (Case snsensitive)
+ *
+ *  @param `source' String to find
+ *  @param `newstring' String replacing `source'
+ *
+ *  @return Index of `search' if is has been found, NSNotFound if not.
+ */
+-(NSString*) strReplace:(NSString*)source by:(NSString*)newString;
+
+/**
+ *  UTF8 encode self
+ *
+ *  @return Encoded string.
+ */
 -(NSString *) urlencode;
+
+/**
+ *  Clean self by removing white spaces & new line charset.
+ *
+ *  @return Encoded string.
+ */
 -(NSString*) trim;
--(NSArray*) explode:(NSString*)sep;
--(BOOL) isNotEqualToString:(NSString*)str;
--(id) StrTrFromData:(NSString*)from to:(NSString*)to;
--(NSArray*)componentsMatchedByRegex:(NSString*)regex;
--(id)regexMatch:(NSString*)pattern;
+
+/**
+ *  Split string using a separator & put substring into a NSArray
+ *
+ *  @param `seperator' Separator used
+ *
+ *  @return NSArray containing all substring
+ */
+-(NSArray*) explode:(NSString*)seperator;
+
+/**
+ *  Check if a string is equal to self
+ *
+ *  @param `string' String to compare with
+ *
+ *  @return YES if `string' is the same as self.
+ */
+-(BOOL) isNotEqualToString:(NSString*)string;
+
 /**
  *  Make a string's first character uppercase
  *
- *  @return Result string
+ *  @return Result string.
  */
 -(NSString *)ucfirst;
+
 /**
  *  Make a string's first character uppercase and the rest lowercase
  *
- *  @return Result string
+ *  @return Result string.
  */
 -(NSString *)ucfirstlc;
-+(BOOL)validateEmail:(NSString *)candidate;
+
+/**
+ *  Check if candidate match e-mail regex @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
+ *
+ *  @return YES if self is e-mail format complient.
+ */
+-(BOOL)validateEmail;
 
 /**
  *  Compare two version strings with number(.number)? format
  *
  *  @param version Version to compare to
  *
- *  @return Comparison result
+ *  @return Comparison result.
  */
 - (NSComparisonResult)compareToVersion:(NSString *)version;
 
-/*!
- @abstract
- Used to convert a string to a nsnumber
- 
- @discussion
- Better use for big number such as facebook id
+/**
+ *  Transform string into NSNumber.
+ *
+ *  @return Comparison result
  */
 -(NSNumber *)toNumber;
 

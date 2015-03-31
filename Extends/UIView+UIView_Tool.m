@@ -243,7 +243,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     ret.height = h;
 	ret.width = w;
 	
-	if([align isSubString:@"right"])
+	if([align hasSubstring:@"right"])
     {
 		CGFloat diff = self.frame.size.width - w;
         [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
@@ -254,7 +254,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 			e.frame = r;
 		}];
 	}
-	if([align isSubString:@"bottom"])
+	if([align hasSubstring:@"bottom"])
     {
         [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
          {
@@ -264,7 +264,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 			e.frame = r;
 		}];
 	}
-	if([align isSubString:@"middle"])
+	if([align hasSubstring:@"middle"])
     {
         [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
         {
@@ -694,7 +694,8 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     recustion();
 }
 
--(UIView*)getMasterView{
+-(UIView*)getMasterView
+{
 	if (self.superview)
 		return [self.superview getMasterView];
 	return self;
@@ -721,7 +722,6 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     }];
 }
 
-
 -(void) resignAllResponder
 {
     [self visiteurView:^(UIView *elt)
@@ -735,64 +735,62 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     }];
 }
 
-+ (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor andEndingColor:(UIColor *)endColor {
-    return [UIView gradientViewForRect:rect startingColor:startColor startingRatio:1 endingColor:endColor andEndingRatio:1];
-}
-
-+ (UIView *) gradientViewForRect:(CGRect)rect startingColor:(UIColor *)startColor startingRatio:(int)startRatio endingColor:(UIColor *)endColor andEndingRatio:(int)endRatio {
-    NSMutableArray *colorsMut = [[NSMutableArray alloc] init];
-    
-    for (int index = 0; index < startRatio; index++) {
-        [colorsMut addObject:startColor];
-    }
-    
-    for (int index = 0; index < endRatio; index++) {
-        [colorsMut addObject:endColor];
-    }
-
-    return [UIView gradientViewForRect:rect andColors:colorsMut];
-}
-
-+ (UIView *) gradientViewForRect:(CGRect)rect andColors:(NSArray *)colors {
-    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height)];
+#pragma mark - Gradients
+-(void) applyGradients:(NSArray *)gradients onFrame:(CGRect)gradientFrame
+{
     CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = view.bounds;
+    gradient.frame = gradientFrame;
     
     NSMutableArray *colorsMut = [[NSMutableArray alloc] init];
     
-    for (UIColor *color in colors) {
-        [colorsMut addObject:(id)[color CGColor]];
+    for (id object in gradients)
+    {
+        if ([object isKindOfClass:[UIColor class]])
+        {
+            [colorsMut addObject:(id)[object CGColor]];
+        }
+        else if ([gradient isKindOfClass:[NSDictionary class]])
+        {
+            UIColor *color = [gradient getXpath:kUIViewGradientColorkey type:[UIColor class] def:[UIColor clearColor]];
+            NSUInteger iterations = [[gradient getXpath:kUIViewGradientColorIterations type:[NSNumber class] def:@1] unsignedIntegerValue];
+            
+            for (NSUInteger index = 0; index < iterations; index++)
+            {
+                [colorsMut addObject:(id)[color CGColor]];
+            }
+        }
     }
-    
-    gradient.colors = colorsMut;
+    gradient.colors = [colorsMut ToUnMutable];
+    [self.layer insertSublayer:gradient atIndex:0];
+}
 
-    [view.layer insertSublayer:gradient atIndex:0];
+-(void) applyGradients:(NSArray *)gradients
+{
+    [self applyGradients:gradients onFrame:self.bounds];
+}
+
+-(void) applyGradientsWithStartColor:(UIColor *)startColor andEndColor:(UIColor *)endColor
+{
+    if (startColor && endColor)
+    {
+        [self applyGradients:@[startColor, endColor]];
+    }
+    else
+    {
+        DLog(@"Bad color (start: %@, end: %@)", startColor, endColor);
+    }
+}
+
++(UIView *) viewWithFrame:(CGRect)frame andGradients:(NSArray *)gradients onFrame:(CGRect)gradientFrame
+{
+    UIView* view = [[UIView alloc] initWithFrame:frame];
+    [view applyGradients:gradients onFrame:gradientFrame];
     return view;
 }
 
-+ (void) gradientForView:(UIView *)view startingColor:(UIColor *)startColor startingRatio:(NSUInteger)startRatio endingColor:(UIColor *)endColor andEndingRatio:(NSUInteger)endRatio {
-    CAGradientLayer *gradient = [CAGradientLayer layer];
-    gradient.frame = view.bounds;
-    
-    NSMutableArray *colorsMut = [[NSMutableArray alloc] init];
-
-    for (int index = 0; index < startRatio; index++) {
-        [colorsMut addObject:startColor];
-    }
-    
-    for (int index = 0; index < endRatio; index++) {
-        [colorsMut addObject:endColor];
-    }
-    
-    NSMutableArray *cgcolorsMut = [[NSMutableArray alloc] init];
-    for (UIColor *color in colorsMut) {
-        [cgcolorsMut addObject:(id)[color CGColor]];
-    }
-    
-    gradient.colors = cgcolorsMut;
-    
-    [view.layer insertSublayer:gradient atIndex:0];
++(UIView *) viewWithFrame:(CGRect)frame startColor:(UIColor *)startColor andEndColor:(UIColor *)endColor
+{
+    return [UIView viewWithFrame:frame andGradients:@[startColor, endColor] onFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 }
-
 
 @end

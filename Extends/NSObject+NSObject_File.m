@@ -92,7 +92,7 @@ static NSString *NSObject_File_application_document_folder_path = nil;
 {
     if (filePath && [filePath length]> 0)
     {
-        [NSObject dateModifiedSort:filePath withTTL:ttl];
+        [NSObject dateModifiedSortFile:filePath withTTL:ttl andRemove:YES];
         id storedObject = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath] ;
         return storedObject;
     }
@@ -232,10 +232,10 @@ static NSString *NSObject_File_application_document_folder_path = nil;
  */
 
 #pragma mark - TTL Checking
-+(NSInteger)dateModifiedSort:(NSString *)fileName withTTL:(NSUInteger)ttl
++(NSInteger)dateModifiedSortFile:(NSString *)filePath withTTL:(NSUInteger)ttl andRemove:(BOOL)shouldRemove
 {
     NSDictionary *attributesForFile = [[NSFileManager defaultManager]
-                                       attributesOfItemAtPath:fileName
+                                       attributesOfItemAtPath:filePath
                                        error:nil];
     
 	NSDate *modificationDate = attributesForFile[NSFileModificationDate];
@@ -243,9 +243,21 @@ static NSString *NSObject_File_application_document_folder_path = nil;
 	NSDate *currentDateMinusTTL = [NSDate dateWithTimeIntervalSince1970:([currentDate timeIntervalSince1970] - ttl)];
 	if ([modificationDate compare:currentDateMinusTTL] == NSOrderedDescending || modificationDate == nil)
 		return 0;
-	[[NSFileManager defaultManager] removeItemAtPath:fileName error:nil];
+    if (shouldRemove)
+        [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 	return 1;
 }
 
++(BOOL)file:(NSString *)filePath hasBeenModifiedBeforeNowMinusTTL:(NSUInteger)ttl
+{
+    if ([NSObject dateModifiedSortFile:filePath withTTL:ttl andRemove:NO] == 1)
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 
 @end
