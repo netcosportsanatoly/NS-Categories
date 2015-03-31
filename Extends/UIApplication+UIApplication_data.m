@@ -17,7 +17,6 @@
     return [NSString stringWithFormat:@"http://itunes.apple.com/%@/app/id%@?mt=8", storeLang, appleID];
 }
 
-
 +(NSString*)getDeviceInfoInHtml
 {
  

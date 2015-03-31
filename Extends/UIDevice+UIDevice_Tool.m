@@ -102,7 +102,7 @@
     NSString *uniqueIdentifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 	if (!uniqueIdentifier)
 		return @"";
-    return [uniqueIdentifier strReplace:@"-" to:@""];
+    return [uniqueIdentifier strReplace:@"-" by:@""];
 
     // Deprecated in iOS 7
     //    NSString *macaddress = [[UIDevice currentDevice] macaddress];
@@ -115,7 +115,7 @@
 
 +(BOOL)isIPAD{
 	NSString * model = [[UIDevice currentDevice] model];
-	return [model isSubString:@"iPad"];
+	return [model hasSubstring:@"iPad"];
 }
 +(BOOL)isOrientationPortrait{
     if ([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown)

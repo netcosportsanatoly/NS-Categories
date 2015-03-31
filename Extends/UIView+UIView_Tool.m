@@ -242,7 +242,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     ret.height = h;
 	ret.width = w;
 	
-	if([align isSubString:@"right"])
+	if([align hasSubstring:@"right"])
     {
 		CGFloat diff = self.frame.size.width - w;
         [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
@@ -253,7 +253,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 			e.frame = r;
 		}];
 	}
-	if([align isSubString:@"bottom"])
+	if([align hasSubstring:@"bottom"])
     {
         [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
          {
@@ -263,7 +263,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 			e.frame = r;
 		}];
 	}
-	if([align isSubString:@"middle"])
+	if([align hasSubstring:@"middle"])
     {
         [self.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
         {
