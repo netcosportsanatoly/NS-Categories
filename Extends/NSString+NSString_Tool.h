@@ -161,7 +161,12 @@
 
 @interface NSMutableAttributedString (NSMutableAttributedString_BOLD)
 
-
+/**
+ *  Upgrading the current attribute Font by adding/removing `-Bold' to its fontname on the given range.
+ *
+ *  @param bold  BOOL describing wether it has `-Bold' or not.
+ *  @param range Range of application.
+ */
 -(void)setBold:(BOOL)bold range:(NSRange)range;
 
 @end
