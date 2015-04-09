@@ -14,7 +14,7 @@
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    formatter.locale = [NSLocale systemLocale];
+    formatter.locale = [NSLocale currentLocale];
     [formatter setDateFormat:dateTimeFormat];
     NSDate *date = [formatter dateFromString:dateTime];
     return date;
@@ -23,7 +23,7 @@
 +(NSString *) stringWithDate:(NSDate *)dateTime followingFormat:(NSString *)dateTimeFormat
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.locale = [NSLocale systemLocale];
+    formatter.locale = [NSLocale currentLocale];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
     [formatter setDateFormat:dateTimeFormat];
     NSString *stringFromDate = [formatter stringFromDate:dateTime];
@@ -38,6 +38,23 @@
 +(NSString *) stringWithISO8601Date:(NSDate *)dateTime
 {
     return [NSDate stringWithDate:dateTime followingFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
+}
+
+-(BOOL) isToday
+{
+    NSDateComponents *otherDay = [[NSCalendar currentCalendar] components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:self];
+    NSDateComponents *today = [[NSCalendar currentCalendar] components:NSEraCalendarUnit|NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit fromDate:[NSDate date]];
+    if([today day] == [otherDay day] &&
+       [today month] == [otherDay month] &&
+       [today year] == [otherDay year] &&
+       [today era] == [otherDay era])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 @end

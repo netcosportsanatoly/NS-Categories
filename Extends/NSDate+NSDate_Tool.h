@@ -48,4 +48,11 @@
  */
 +(NSString *) stringWithISO8601Date:(NSDate *)dateTime;
 
+/**
+ *  Check if self is today or not
+ *
+ *  @return Boolean value describing if the date is today or not.
+ */
+-(BOOL) isToday;
+
 @end
