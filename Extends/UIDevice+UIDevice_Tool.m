@@ -79,9 +79,6 @@
     return platform;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-#pragma mark -
-#pragma mark Public Methods
 - (NSString *) uniqueDeviceIdentifier
 {
     NSString *macaddress = [[UIDevice currentDevice] macaddress];
@@ -107,6 +104,12 @@
     //		return @"";
     //    NSString *uniqueIdentifier = [macaddress md5];
     //    return uniqueIdentifier;
+}
+
++(BOOL)isUniversalApplication
+{
+    NSArray *deviceFamily =[[[NSBundle mainBundle] infoDictionary] valueForKey:@"UIDeviceFamily"];
+    return [deviceFamily count]==2;
 }
 
 +(BOOL)isIPAD
@@ -221,4 +224,48 @@ __strong static NSString *getVerionsiOS_systemVersion = nil;
     return valssys;
 }
 
++(NSString*)getDeviceShortLanguage
+{
+    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+    NSArray *langs = [defs objectForKey:@"AppleLanguages"];
+    NSString *l = [langs[0] substringToIndex:2];
+    return l;
+}
+
++(NSString*)getDeviceFullLanguage
+{
+    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+    NSArray *langs = [defs objectForKey:@"AppleLanguages"];
+    NSString *l = langs[0];
+    return l;
+}
+
++(NSString*)getDeviceCountry
+{
+    NSLog(@"%@", [[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys]);
+    NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+    //NSDictionary *dic = [defs dictionaryRepresentation];
+    NSString *langs = [defs objectForKey:@"AppleLocale"];
+    NSString *l = [langs substringFromIndex:3];
+    if ([l length] == 0)
+        l = langs ;
+    return l;
+}
+
++(NSString*)getDeviceInfoInHtml
+{
+    
+    NSString *deviceInfo = [NSString stringWithFormat:@"%@ (%@)",
+                            [[UIDevice currentDevice] model],
+                            [[UIDevice currentDevice] systemVersion]];
+    
+    NSString *appInfo = [NSString stringWithFormat:@"%@ (%@)",
+                         [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"],
+                         [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+    
+    NSLocale *locale = [NSLocale currentLocale];
+    NSString *language = [[locale displayNameForKey:NSLocaleIdentifier value:[UIDevice getDeviceShortLanguage]] capitalizedString];
+    
+    return [NSString stringWithFormat:@"%@<br>%@<br>%@",deviceInfo,appInfo,language] ;
+}
 @end

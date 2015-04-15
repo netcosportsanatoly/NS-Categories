@@ -11,45 +11,25 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-@implementation NSObject (NSObject_Tool)
-
-+(NSString*)getLangName{
-	NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-	NSArray *langs = [defs objectForKey:@"AppleLanguages"];
-	NSString *l = [langs[0] substringToIndex:2];
-	return l;
-}
-
-+(NSString*)getFullLangName{
-	NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-	NSArray *langs = [defs objectForKey:@"AppleLanguages"];
-	NSString *l = langs[0];
-	return l;
-}
-
-+(NSString*)getCountryPhone{
-    NSLog(@"%@", [[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys]);
-	NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    //NSDictionary *dic = [defs dictionaryRepresentation];
-	NSString *langs = [defs objectForKey:@"AppleLocale"];
-	NSString *l = [langs substringFromIndex:3];
-    if ([l length] == 0)
-        l = langs ;
-	return l;
-}
 #define D_MAX_BG_QUEUE 20
 
-+(void)backGroundBlockDownload:(void (^)())block{
-	if (![NSThread isMainThread]){
+@implementation NSObject (NSObject_Tool)
+
+#pragma mark - QUEUES MANAGEMENT
++(dispatch_queue_t)backgroundDownloadQueueBlock:(void (^)())block
+{
+	if (![NSThread isMainThread])
+    {
 		block();
-		return;
+		return 0;
 	}
 	
 	static dispatch_queue_t ar_queue2[D_MAX_BG_QUEUE];
 	static dispatch_once_t onceToken2;
 	srand((unsigned int)time(NULL));
 	dispatch_once(&onceToken2, ^{
-		for (int i = 0; i < D_MAX_BG_QUEUE; i++) {
+		for (int i = 0; i < D_MAX_BG_QUEUE; i++)
+        {
 			ar_queue2[i] = dispatch_queue_create([[NSString stringWithFormat:@"MyQueue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)],NULL);
 		}
 	});
@@ -58,20 +38,22 @@
 	dispatch_async(queue, ^{
 		block();
 	});
+    return queue;
 }
 
-+(void)backGroundBlock:(void (^)())block
++(dispatch_queue_t)backgroundQueueBlock:(void (^)())block
 {
 	if (![NSThread isMainThread])
     {
 		block();
-		return;
+        return 0;
 	}
 	static dispatch_queue_t ar_queue[D_MAX_BG_QUEUE];
 	static dispatch_once_t onceToken;
 	srand((unsigned int)time(NULL));
 	dispatch_once(&onceToken, ^{
-		for (int i = 0; i < D_MAX_BG_QUEUE; i++) {
+		for (int i = 0; i < D_MAX_BG_QUEUE; i++)
+        {
 			ar_queue[i] = dispatch_queue_create([[NSString stringWithFormat:@"MyQueue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)],NULL);
 		}
 	});
@@ -80,18 +62,36 @@
 	dispatch_async(queue, ^{
 		block();
 	});
+    return queue;
 }
 
-+(void)mainThreadBlock:(void (^)())block
++(dispatch_queue_t)mainQueueBlock:(void (^)())block
 {
-	// safe if main thread run
-	if ([NSThread isMainThread]){
-		block();
-		return;
+    dispatch_queue_t queue = dispatch_get_main_queue();
+
+    if ([NSThread isMainThread])
+    {
+        block();
 	}
-	dispatch_sync(dispatch_get_main_queue(), ^{
-		block();
-	});
+    else
+    {
+        dispatch_sync(queue, ^{
+            block();
+        });
+    }
+    return queue;
+}
+
++(BOOL)isMainThread
+{
+    if ([NSThread isMainThread])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 -(void)NSObject_Tool:(void(^)())block
@@ -102,12 +102,6 @@
 -(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block
 {
 	[self performSelector:@selector(NSObject_Tool:) withObject:[block copy] afterDelay:time];
-}
-
-+(BOOL)isUniversalApplication
-{
-    NSArray *deviceFamily =[[[NSBundle mainBundle] infoDictionary] valueForKey:@"UIDeviceFamily"];
-	return [deviceFamily count]==2;
 }
 
 -(NSDictionary *)serializeToDictionary

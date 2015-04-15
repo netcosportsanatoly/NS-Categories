@@ -7,31 +7,14 @@
 //
 
 #import "UIApplication+UIApplication_data.h"
-#import "Extends+Libs.h"
+#import "UIDevice+UIDevice_Tool.h"
 
 @implementation UIApplication (UIApplication_data)
 
 +(NSString *)getItunesUrlWithAppleID:(NSString *)appleID
 {
-    NSString *storeLang = [[NSObject getLangName] isEqualToString:@"fr"] ? @"fr" : @"en";
+    NSString *storeLang = [[UIDevice getDeviceShortLanguage] isEqualToString:@"fr"] ? @"fr" : @"en";
     return [NSString stringWithFormat:@"http://itunes.apple.com/%@/app/id%@?mt=8", storeLang, appleID];
-}
-
-+(NSString*)getDeviceInfoInHtml
-{
- 
-    NSString *deviceInfo = [NSString stringWithFormat:@"%@ (%@)",
-                                   [[UIDevice currentDevice] model],
-                                   [[UIDevice currentDevice] systemVersion]];
-    
-    NSString *appInfo = [NSString stringWithFormat:@"%@ (%@)",
-                         [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"],
-                         [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
-    
-    NSLocale *locale = [NSLocale currentLocale];
-    NSString *language = [[locale displayNameForKey:NSLocaleIdentifier value:[NSObject getLangName]] capitalizedString];
-    
-    return [NSString stringWithFormat:@"%@<br>%@<br>%@",deviceInfo,appInfo,language] ;
 }
 
 @end

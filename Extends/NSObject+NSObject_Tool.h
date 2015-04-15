@@ -9,16 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface NSObject (NSObject_Tool)
-+(NSString*) getLangName;
-+(NSString*) getFullLangName;
-+(NSString*) getCountryPhone;
 
-+(void)backGroundBlockDownload:(void (^)())block;
-+(void)backGroundBlock:(void (^)())block;
-+(void)mainThreadBlock:(void (^)())block;
++(BOOL)isMainThread;
++(dispatch_queue_t)mainQueueBlock:(void (^)())block;
++(dispatch_queue_t)backgroundQueueBlock:(void (^)())block;
++(dispatch_queue_t)backgroundDownloadQueueBlock:(void (^)())block;
 
 -(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block;
-+(BOOL)isUniversalApplication;
-
 -(NSDictionary *)serializeToDictionary;
+
 @end
