@@ -9,11 +9,16 @@
 #import "NSArray+NSArray_Bundle.h"
 
 @implementation NSArray (NSArray_Bundle)
--(id)getObjectsType:(Class)my_class{
+
+-(id)getObjectsType:(Class)my_class
+{
 	return [self getObjectsType:my_class recursive:YES];
 }
--(id)getObjectsType:(Class)my_class recursive:(BOOL)recursive{
-	for (id elt in self) {
+
+-(id)getObjectsType:(Class)my_class recursive:(BOOL)recursive
+{
+	for (id elt in self)
+    {
 		if ([elt isKindOfClass:my_class])
 			return elt;
 		if (recursive && [elt isKindOfClass:[NSArray class]])
@@ -21,4 +26,5 @@
 	}
 	return nil;
 }
+
 @end

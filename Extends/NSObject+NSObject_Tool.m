@@ -16,52 +16,37 @@
 @implementation NSObject (NSObject_Tool)
 
 #pragma mark - QUEUES MANAGEMENT
-+(dispatch_queue_t)backgroundDownloadQueueBlock:(void (^)())block
-{
-	if (![NSThread isMainThread])
-    {
-		block();
-		return 0;
-	}
-	
-	static dispatch_queue_t ar_queue2[D_MAX_BG_QUEUE];
-	static dispatch_once_t onceToken2;
-	srand((unsigned int)time(NULL));
-	dispatch_once(&onceToken2, ^{
-		for (int i = 0; i < D_MAX_BG_QUEUE; i++)
-        {
-			ar_queue2[i] = dispatch_queue_create([[NSString stringWithFormat:@"MyQueue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)],NULL);
-		}
-	});
-	int i = rand() % D_MAX_BG_QUEUE;
-	dispatch_queue_t queue = ar_queue2[i];
-	dispatch_async(queue, ^{
-		block();
-	});
-    return queue;
-}
-
 +(dispatch_queue_t)backgroundQueueBlock:(void (^)())block
 {
-	if (![NSThread isMainThread])
-    {
-		block();
-        return 0;
-	}
-	static dispatch_queue_t ar_queue[D_MAX_BG_QUEUE];
-	static dispatch_once_t onceToken;
-	srand((unsigned int)time(NULL));
-	dispatch_once(&onceToken, ^{
-		for (int i = 0; i < D_MAX_BG_QUEUE; i++)
-        {
-			ar_queue[i] = dispatch_queue_create([[NSString stringWithFormat:@"MyQueue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)],NULL);
-		}
-	});
+    static dispatch_queue_t ar_queue[D_MAX_BG_QUEUE];
+    static dispatch_once_t onceToken;
+
+    srand((unsigned int)time(NULL));
 	int i = rand() % D_MAX_BG_QUEUE;
-	dispatch_queue_t queue = ar_queue[i];
-	dispatch_async(queue, ^{
-		block();
-	});
+    dispatch_queue_t queue = NULL;
+    
+    if ([NSObject isMainQueue] == NO)
+    {
+        if (block)
+            block();
+        
+        if (ar_queue)
+            queue = ar_queue[i];
+	}
+    else
+    {
+        dispatch_once(&onceToken, ^{
+            for (int index = 0; index < D_MAX_BG_QUEUE; index++)
+            {
+                ar_queue[index] = dispatch_queue_create([[NSString stringWithFormat:@"NS-Queue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)], NULL);
+            }
+        });
+        queue = ar_queue[i];
+        dispatch_async(queue, ^{
+            if (block)
+                block();
+        });
+    }
     return queue;
 }
 
@@ -69,21 +54,24 @@
 {
     dispatch_queue_t queue = dispatch_get_main_queue();
 
-    if ([NSThread isMainThread])
+    if ([NSObject isMainQueue])
     {
-        block();
+        if (block)
+            block();
 	}
     else
     {
         dispatch_sync(queue, ^{
-            block();
+            if (block)
+                block();
         });
     }
     return queue;
 }
 
-+(BOOL)isMainThread
++(BOOL)isMainQueue
 {
+    // Main queue is executed exclusively on the mainThread.
     if ([NSThread isMainThread])
     {
         return YES;

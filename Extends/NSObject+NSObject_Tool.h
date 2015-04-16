@@ -10,10 +10,9 @@
 
 @interface NSObject (NSObject_Tool)
 
-+(BOOL)isMainThread;
++(BOOL)isMainQueue;
 +(dispatch_queue_t)mainQueueBlock:(void (^)())block;
 +(dispatch_queue_t)backgroundQueueBlock:(void (^)())block;
-+(dispatch_queue_t)backgroundDownloadQueueBlock:(void (^)())block;
 
 -(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block;
 -(NSDictionary *)serializeToDictionary;
