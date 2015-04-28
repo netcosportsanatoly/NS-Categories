@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-typedef enum{
+typedef enum
+{
     NSCategoryDiffCompNotFound,
     NSCategoryDiffCompEqual,
     NSCategoryDiffCompUpdate

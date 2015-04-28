@@ -80,6 +80,7 @@
 +(void)removeCacheFile:(NSString *)fileName;
 +(void)removeCacheFiles;
 +(void)removeTempFile:(NSString *)fileName;
++(void)removeTempFiles;
 
 /**
  *  Check if the file is older than the TTL.
