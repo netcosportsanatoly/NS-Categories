@@ -17,6 +17,7 @@
 #pragma mark Class method
 + (instancetype)arrayWithArrays:(NSArray *)array, ...
 {
+#warning NOT WORKING ANYMORE
     NSMutableArray *mutableArrayOfArrays = [NSMutableArray new];
     
     va_list args;
@@ -32,7 +33,6 @@
         }
     }
     va_end(args);
-    
     return [mutableArrayOfArrays ToUnMutable];
 }
 
