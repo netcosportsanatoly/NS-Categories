@@ -17,8 +17,10 @@
 #pragma mark Class method
 + (instancetype)arrayWithArrays:(NSArray *)array, ...
 {
-#warning NOT WORKING ANYMORE
     NSMutableArray *mutableArrayOfArrays = [NSMutableArray new];
+
+    if (array)
+        [mutableArrayOfArrays addObjectsFromArray:array];
     
     va_list args;
     va_start(args, array);
