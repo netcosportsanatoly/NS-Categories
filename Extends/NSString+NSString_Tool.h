@@ -14,7 +14,26 @@
 -(NSData *) obfuscatewithKey:(NSString *)key;
 -(id) StrTrFromData:(NSString*)from to:(NSString*)to;
 
+/**
+ *  Insert a string into self starting at the given index
+ *
+ *  @param `stringToInsert' The string to insert
+ *  @param `index' The index where to start the insertion
+ *
+ *  @return A new instance of NSString representing a new version of self with the inserted string
+ */
+-(NSString *)stringByInsertingString:(NSString *)stringToInsert atIndex:(NSUInteger)index;
 
+/**
+ *  Enumerates the different occurences of a potential substring using a mask as the string comparison option through a block.
+ *
+ *  @param `substring' The string to find
+ *  @param `options' The string comparison option to use for matching strings
+ *  @param `enumerationBlock' The enumeration block called each time an occurence is found. It gives its index.
+ *
+ *  @return void
+ */
+-(void) enumerateOccurencesOfSubstring:(NSString *)substring  options:(NSStringCompareOptions)mask usingBlock:(void(^)(NSUInteger indexOfOccurence, BOOL *stop))enumerationBlock;
 
 /**
  *  Check if parts of self respond to the given regular expression

@@ -12,6 +12,4 @@
 
 +(NSString *)getItunesUrlWithAppleID:(NSString *)appleID;
 
-+(NSString*)getDeviceInfoInHtml;
-
 @end

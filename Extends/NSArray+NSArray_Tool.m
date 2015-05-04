@@ -18,6 +18,9 @@
 + (instancetype)arrayWithArrays:(NSArray *)array, ...
 {
     NSMutableArray *mutableArrayOfArrays = [NSMutableArray new];
+
+    if (array)
+        [mutableArrayOfArrays addObjectsFromArray:array];
     
     va_list args;
     va_start(args, array);
@@ -32,7 +35,6 @@
         }
     }
     va_end(args);
-    
     return [mutableArrayOfArrays ToUnMutable];
 }
 

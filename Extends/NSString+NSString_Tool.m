@@ -52,7 +52,80 @@
 	return [NSData  dataWithData:data];
 }
 
--(NSInteger)nbrOccurenceString:(NSString *)parse{
+-(id)StrTrFromData:(NSString*)from to:(NSString*)to
+{
+    if ([self isKindOfClass:[NSString class]])
+    {
+        NSMutableString * s = [[NSMutableString alloc] init];
+        [s appendString:[(NSString*)self strReplace:from by:to]];
+        return s;
+    }
+    if ([self isKindOfClass:[NSArray class]])
+    {
+        NSArray *a = (NSArray *)self;
+        NSMutableArray *ar = [[NSMutableArray alloc] init];
+        for (id e in a)
+        {
+            id ee = [e StrTrFromData:from to:to];
+            [ar addObject:ee];
+        }
+        return ar;
+    }
+    if ([self isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *a = (NSDictionary *)self;
+        NSMutableDictionary *ar = [[NSMutableDictionary alloc] init];
+        for (id k in [a allKeys])
+        {
+            id e = a[k];
+            id ee = [e StrTrFromData:from to:to];
+            id kk = [k StrTrFromData:from to:to];
+            ar[kk] = ee;
+        }
+        return ar;
+    }
+    return self;
+}
+
+-(NSString *)stringByInsertingString:(NSString *)stringToInsert atIndex:(NSUInteger)index
+{
+    NSMutableString *mutableString = [self mutableCopy];
+    [mutableString insertString:stringToInsert atIndex:index];
+    return mutableString;
+}
+
+-(void) enumerateOccurencesOfSubstring:(NSString *)substring  options:(NSStringCompareOptions)mask usingBlock:(void(^)(NSUInteger indexOfOccurence, BOOL *stop))enumerationBlock
+{
+    NSUInteger lenght = [self length];
+    
+    NSRange searchRange = NSMakeRange(0, lenght);
+    NSRange foundRange = NSMakeRange(0, 0);
+    
+    while (searchRange.location < lenght)
+    {
+        searchRange.length = lenght - searchRange.location;
+        
+        foundRange = [self rangeOfString:substring options:mask range:searchRange];
+        if (foundRange.location != NSNotFound)
+        {
+            if (enumerationBlock)
+            {
+                BOOL shouldStop = NO;
+                enumerationBlock(foundRange.location, &shouldStop);
+                if (shouldStop == YES)
+                    break;
+            }
+            searchRange.location = foundRange.location + foundRange.length;
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+
+-(NSInteger)nbrOccurenceString:(NSString *)parse
+{
 	int numberOfChar = -1;
 	NSString *res = nil;
 	NSScanner *mainScanner = [NSScanner scannerWithString:self];
@@ -66,12 +139,15 @@
 	return numberOfChar;
 }
 
--(unsigned long)crc32{
+-(unsigned long)crc32
+{
     NSData *data = [self dataUsingEncoding:(NSUTF8StringEncoding)];
     uLong crc = crc32(0, NULL, 0);
     return crc32(crc, [data bytes], (uInt)[data length]);
 }
--(NSString *) md5 {
+
+-(NSString *) md5
+{
 	const char *cStr = [self UTF8String];
 	unsigned char result[CC_MD5_DIGEST_LENGTH];
 	CC_MD5( cStr, (CC_LONG)strlen(cStr), result );
@@ -180,7 +256,6 @@
 	return str;
 }
 
-
 -(NSString *) urlencode
 {
     return [[NSString stringWithString:self] stringByAddingPercentEscapesUsingEncoding:(NSUTF8StringEncoding)];
@@ -200,41 +275,6 @@
 {
 	NSArray *words = [self componentsSeparatedByString:sep];
 	return words;
-}
-
--(id)StrTrFromData:(NSString*)from to:(NSString*)to
-{
-	if ([self isKindOfClass:[NSString class]])
-    {
-		NSMutableString * s = [[NSMutableString alloc] init];
-		[s appendString:[(NSString*)self strReplace:from by:to]];
-		return s;
-	}
-	if ([self isKindOfClass:[NSArray class]])
-    {
-		NSArray *a = (NSArray *)self;
-		NSMutableArray *ar = [[NSMutableArray alloc] init];
-		for (id e in a)
-        {
-			id ee = [e StrTrFromData:from to:to];
-			[ar addObject:ee];
-		}
-		return ar;
-	}
-	if ([self isKindOfClass:[NSDictionary class]])
-    {
-		NSDictionary *a = (NSDictionary *)self;
-		NSMutableDictionary *ar = [[NSMutableDictionary alloc] init];
-		for (id k in [a allKeys])
-        {
-			id e = a[k];
-			id ee = [e StrTrFromData:from to:to];
-			id kk = [k StrTrFromData:from to:to];
-			ar[kk] = ee;
-		}
-		return ar;
-	}
-	return self;
 }
 
 -(NSArray*)componentsMatchedByRegex:(NSString*)regex

@@ -19,6 +19,7 @@
 - (NSString *) uniqueGlobalDeviceIdentifier;
 - (NSString *) getDeviceType;
 
++(BOOL)     isUniversalApplication;
 +(BOOL)     isIPAD;
 +(BOOL)     isOrientationPortrait;
 +(BOOL)     isIphone6Plus;
@@ -29,5 +30,11 @@
 
 +(int)      getVerionsiOS;
 +(CGRect)   getScreenFrame;
+
++(NSString*)getDeviceCountry;
++(NSString*)getDeviceFullLanguage;
++(NSString*)getDeviceShortLanguage;
+
++(NSString*)getDeviceInfoInHtml;;
 
 @end

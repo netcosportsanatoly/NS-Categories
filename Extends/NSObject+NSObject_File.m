@@ -215,7 +215,7 @@ static NSString *NSObject_File_application_document_folder_path = nil;
     }
     else
     {
-        DLog(@"[%@] Error accessing temporary directory: %@", NSStringFromClass([self class]), [error description]);
+        DLog(@"[%@] Error accessing cache directory: %@", NSStringFromClass([self class]), [error description]);
     }
 }
 
@@ -225,6 +225,20 @@ static NSString *NSObject_File_application_document_folder_path = nil;
     [NSObject removeFileAtPath:[NSObject getApplicationTempPathForFile:fileName]];
 }
 
++(void)removeTempFiles
+{
+    NSError *error;
+    NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSObject getApplicationTempPath] error:&error];
+    if (!error)
+    {
+        for (NSString *file in tmpDirectory)
+            [NSObject removeTempFile:file];
+    }
+    else
+    {
+        DLog(@"[%@] Error accessing temporary directory: %@", NSStringFromClass([self class]), [error description]);
+    }
+}
 
 /**
  *  TTL CHECKING

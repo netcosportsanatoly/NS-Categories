@@ -10,27 +10,51 @@
 
 @implementation NSDate (NSDate_Tool)
 
-+(NSDate *) dateWithISO8601String:(NSString *)dateTimeZFormat;
++(NSDate *)dateWithString:(NSString *)dateTime followingFormat:(NSString *)dateTimeFormat
 {
-// 2013-11-18T23:00:00.324Z
-// [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    formatter.locale = [NSLocale systemLocale];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
-    NSDate *date = [formatter dateFromString:dateTimeZFormat];
+    formatter.locale = [NSLocale currentLocale];
+    [formatter setDateFormat:dateTimeFormat];
+    NSDate *date = [formatter dateFromString:dateTime];
     return date;
+}
+
++(NSString *) stringWithDate:(NSDate *)dateTime followingFormat:(NSString *)dateTimeFormat
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.locale = [NSLocale currentLocale];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:dateTimeFormat];
+    NSString *stringFromDate = [formatter stringFromDate:dateTime];
+    return stringFromDate;
+}
+
++(NSDate *) dateWithISO8601String:(NSString *)dateTimeZFormat;
+{
+    return [NSDate dateWithString:dateTimeZFormat followingFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
 }
 
 +(NSString *) stringWithISO8601Date:(NSDate *)dateTime
 {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    formatter.locale = [NSLocale systemLocale];
-    [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
-    NSString *stringFromDate = [formatter stringFromDate:dateTime];
-    return stringFromDate;
+    return [NSDate stringWithDate:dateTime followingFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
+}
+
+-(BOOL) isToday
+{
+    NSDateComponents *otherDay = [[NSCalendar currentCalendar] components:NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:self];
+    NSDateComponents *today = [[NSCalendar currentCalendar] components:NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:[NSDate date]];
+    if([today day] == [otherDay day] &&
+       [today month] == [otherDay month] &&
+       [today year] == [otherDay year] &&
+       [today era] == [otherDay era])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
 }
 
 @end
