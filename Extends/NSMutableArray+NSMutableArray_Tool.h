@@ -45,4 +45,18 @@
  */
 -(void)moveObject:(id)object toIndex:(NSUInteger)newIndex;
 
+/**
+ *  Insert the object at the end of the array. (Equivalent of C++ push_back on std::vectors.)
+ *
+ *  @param object   Object to insert
+ */
+-(void)pushBackObject:(id)object;
+
+/**
+ *  Insert the object at the beginning of the array. (Equivalent of C++ push_front on std::vectors.)
+ *
+ *  @param object   Object to insert
+ */
+-(void)pushFrontObject:(id)object;
+
 @end

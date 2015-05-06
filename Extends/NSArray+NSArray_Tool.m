@@ -92,7 +92,7 @@
              [remove addObject:obj];
      }];
 
-    hasChange = [remove count] > 0 || [insert count] > 0 || [remove count] > 0;
+    hasChange = [remove count] > 0 || [insert count] > 0 || [update count] > 0;
     completed(hasChange, remove, insert, update);
     return hasChange;
 }
@@ -150,7 +150,7 @@
          if(!hasStopped)
              [remove addObject:[NSIndexPath indexPathForItem:index inSection:section]];
      }];
-    hasChange = [remove count] > 0 || [insert count] > 0 || [remove count] > 0;
+    hasChange = [remove count] > 0 || [insert count] > 0 || [update count] > 0;
     completed(hasChange, remove, insert, update);
     return hasChange;
 }

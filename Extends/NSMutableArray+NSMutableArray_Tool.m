@@ -27,6 +27,7 @@
 
 -(void)removeObjectsPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate
 {
+    NSParameterAssert(predicate);
     NSIndexSet *setOfIndexesToRemove = [self indexesOfObjectsPassingTest:predicate];
     
     if (setOfIndexesToRemove && [setOfIndexesToRemove count] > 0)
@@ -37,6 +38,7 @@
 
 -(void)removeStringIdenticalTo:(NSString *)stringToRemove
 {
+    NSParameterAssert(stringToRemove);
     if (!stringToRemove)
         return ;
     
@@ -58,8 +60,21 @@
 
 -(void)moveObject:(id)object toIndex:(NSUInteger)newIndex
 {
+    NSParameterAssert(object);
     [self moveObjectAtIndex:[self indexOfObject:object] toIndex:newIndex];
 }
 
+-(void)pushBackObject:(id)object
+{
+    NSParameterAssert(object);
+    NSUInteger index = [self count] == 0 ? 0 :[self count]-1;
+    [self insertObject:object atIndex:index];
+}
+
+-(void)pushFrontObject:(id)object
+{
+    NSParameterAssert(object);
+    [self insertObject:object atIndex:0];
+}
 
 @end
