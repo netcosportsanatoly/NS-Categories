@@ -67,8 +67,7 @@
 -(void)pushBackObject:(id)object
 {
     NSParameterAssert(object);
-    NSUInteger index = [self count] == 0 ? 0 :[self count]-1;
-    [self insertObject:object atIndex:index];
+    [self addObject:object];
 }
 
 -(void)pushFrontObject:(id)object
