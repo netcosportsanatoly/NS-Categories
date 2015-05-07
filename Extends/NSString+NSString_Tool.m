@@ -248,10 +248,10 @@
 -(NSString*) strReplace:(NSString*)source by:(NSString*)newString
 {
 	NSMutableString *str = [NSMutableString stringWithString:self];
-	[ str replaceOccurrencesOfString:source
+	[str replaceOccurrencesOfString:source
 						  withString:newString
-							 options:0
-							   range:NSMakeRange(0, [source length])
+							 options:NSLiteralSearch
+							   range:NSMakeRange(0, [str length])
 	 ];
 	return str;
 }
