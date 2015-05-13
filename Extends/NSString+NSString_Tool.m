@@ -97,15 +97,13 @@
 -(void) enumerateOccurencesOfSubstring:(NSString *)substring  options:(NSStringCompareOptions)mask usingBlock:(void(^)(NSUInteger indexOfOccurence, BOOL *stop))enumerationBlock
 {
     NSUInteger lenght = [self length];
-    
     NSRange searchRange = NSMakeRange(0, lenght);
-    NSRange foundRange = NSMakeRange(0, 0);
     
     while (searchRange.location < lenght)
     {
         searchRange.length = lenght - searchRange.location;
-        
-        foundRange = [self rangeOfString:substring options:mask range:searchRange];
+        NSRange foundRange = [self rangeOfString:substring options:mask range:searchRange];
+
         if (foundRange.location != NSNotFound)
         {
             if (enumerationBlock)
