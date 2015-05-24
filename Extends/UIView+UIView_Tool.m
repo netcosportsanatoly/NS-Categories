@@ -13,6 +13,7 @@
 #import "NSString+NSString_Tool.h"
 #import "NSObject+NSObject_Tool.h"
 #import "UIDevice+UIDevice_Tool.h"
+#import "NSUsefulDefines.h"
 
 static const char * const kParentViewControllerKey = "kParentViewControllerKey";
 static const char * const kTagObjectiveKey = "kTagObjectiveKey";
