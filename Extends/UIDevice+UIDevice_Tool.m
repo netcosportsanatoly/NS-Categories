@@ -254,18 +254,21 @@ __strong static NSString *getVerionsiOS_systemVersion = nil;
 
 +(NSString*)getDeviceInfoInHtml
 {
-    
-    NSString *deviceInfo = [NSString stringWithFormat:@"%@ (%@)",
+    NSString *language = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:[UIDevice getDeviceShortLanguage]] capitalizedString];
+
+    NSString *deviceInfo = [NSString stringWithFormat:@"[Device]<br>Model: %@<br>System version: %@<br>Language: %@<br>UUID: %@<br>",
                             [[UIDevice currentDevice] model],
-                            [[UIDevice currentDevice] systemVersion]];
-    
-    NSString *appInfo = [NSString stringWithFormat:@"%@ (%@)",
+                            [[UIDevice currentDevice] systemVersion],
+                            language,
+                            [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier]];
+
+    NSString *appInfo = [NSString stringWithFormat:@"[Application]<br>Display name: %@<br>Version (build): %@ (%@)<br>",
                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"],
+                         [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"],
                          [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
-    
-    NSLocale *locale = [NSLocale currentLocale];
-    NSString *language = [[locale displayNameForKey:NSLocaleIdentifier value:[UIDevice getDeviceShortLanguage]] capitalizedString];
-    
-    return [NSString stringWithFormat:@"%@<br>%@<br>%@",deviceInfo,appInfo,language] ;
+
+    return [NSString stringWithFormat:@"%@<br>%@", deviceInfo, appInfo];
 }
 @end
+
+
