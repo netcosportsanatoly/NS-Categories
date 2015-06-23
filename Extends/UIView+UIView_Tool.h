@@ -30,6 +30,14 @@ static NSString *kUIViewGradientColorIterations = @"kUIViewGradientColorIteratio
 -(UIView*)addSubviewToBonceWithConstraintWithoutLanguageDirection:(UIView*)view;
 -(UIView*)addSubviewToBonceWithConstraint:(UIView*)view options:(NSLayoutFormatOptions)options;
 
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view below:(UIView*)belowView;
+-(UIView*)insertSubviewToBonceWithConstraintWithoutLanguageDirection:(UIView*)view below:(UIView*)belowView;
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view options:(NSLayoutFormatOptions)options below:(UIView*)belowView;
+
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view above:(UIView*)aboveView;
+-(UIView*)insertSubviewToBonceWithConstraintWithoutLanguageDirection:(UIView*)view above:(UIView*)aboveView;
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view options:(NSLayoutFormatOptions)options above:(UIView*)aboveView;
+
 -(void)setCenterJAPaddings:(id)paddings;
 -(void)setCenterJA;
 -(CGSize)renderRelatifInlineScroll:(BOOL)scroll align:(NSString*)align;

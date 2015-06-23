@@ -189,6 +189,46 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     return self;
 }
 
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view below:(UIView*)belowView {
+    return [self insertSubviewToBonceWithConstraint:view options:0 below:belowView];
+}
+
+-(UIView*)insertSubviewToBonceWithConstraintWithoutLanguageDirection:(UIView*)view below:(UIView*)belowView {
+    return [self insertSubviewToBonceWithConstraint:view options:NSLayoutFormatDirectionLeftToRight below:belowView];
+}
+
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view options:(NSLayoutFormatOptions)options below:(UIView*)belowView {
+    if (!view || !belowView)
+        return self;
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self insertSubview:view belowSubview:belowView];
+    id posx = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[view]-0-|" options:options metrics:nil views:NSDictionaryOfVariableBindings(view)];
+    id posy = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)];
+    [self addConstraints:posx];
+    [self addConstraints:posy];
+    return self;
+}
+
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view above:(UIView*)aboveView {
+    return [self insertSubviewToBonceWithConstraint:view options:0 above:aboveView];
+}
+
+-(UIView*)insertSubviewToBonceWithConstraintWithoutLanguageDirection:(UIView*)view above:(UIView*)aboveView {
+    return [self insertSubviewToBonceWithConstraint:view options:NSLayoutFormatDirectionLeftToRight above:aboveView];
+}
+
+-(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view options:(NSLayoutFormatOptions)options above:(UIView*)aboveView {
+    if (!view || !aboveView)
+        return self;
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self insertSubview:view aboveSubview:aboveView];
+    id posx = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[view]-0-|" options:options metrics:nil views:NSDictionaryOfVariableBindings(view)];
+    id posy = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[view]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(view)];
+    [self addConstraints:posx];
+    [self addConstraints:posy];
+    return self;
+}
+
 -(UIView*)addSubviewToBonce:(UIView*)view autoSizing:(BOOL)autosize{
 	if (autosize)
 		[view setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
