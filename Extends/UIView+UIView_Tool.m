@@ -189,6 +189,14 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     return self;
 }
 
+-(UIView*)insertSubviewToBonce:(UIView*)view below:(UIView*)belowView autoSizing:(BOOL)autosize {
+    if (autosize)
+        [view setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
+    view.frame = self.bounds;
+    [self insertSubview:view belowSubview:belowView];
+    return view;
+}
+
 -(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view below:(UIView*)belowView {
     return [self insertSubviewToBonceWithConstraint:view options:0 below:belowView];
 }
@@ -207,6 +215,14 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     [self addConstraints:posx];
     [self addConstraints:posy];
     return self;
+}
+
+-(UIView*)insertSubviewToBonce:(UIView*)view above:(UIView*)aboveView autoSizing:(BOOL)autosize {
+    if (autosize)
+        [view setAutoresizingMask:(UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight)];
+    view.frame = self.bounds;
+    [self insertSubview:view aboveSubview:aboveView];
+    return view;
 }
 
 -(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view above:(UIView*)aboveView {
@@ -247,6 +263,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 	[self addSubview:view];
 	return view;
 }
+
 -(void)setCenterJAPaddings:(id)paddings{
 	[self renderRelativeSubviewsSetMyContentScroll:NO paddings:paddings];
 	CGFloat w = 0;
