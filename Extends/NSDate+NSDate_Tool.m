@@ -30,6 +30,12 @@
     return stringFromDate;
 }
 
++(NSDate *) dateWithTimeStamp:(NSTimeInterval)gmtTimestamp
+{
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:gmtTimestamp];
+    return [date toLocalTime];
+}
+
 +(NSDate *) dateWithISO8601String:(NSString *)dateTimeZFormat;
 {
     return [NSDate dateWithString:dateTimeZFormat followingFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"];
@@ -55,6 +61,20 @@
     {
         return NO;
     }
+}
+
+-(NSDate *) toLocalTime
+{
+    NSTimeZone *tz = [NSTimeZone localTimeZone];
+    NSInteger seconds = [tz secondsFromGMTForDate:self];
+    return [NSDate dateWithTimeInterval: seconds sinceDate:self];
+}
+
+-(NSDate *) toGlobalTime
+{
+    NSTimeZone *tz = [NSTimeZone localTimeZone];
+    NSInteger seconds = -[tz secondsFromGMTForDate:self];
+    return [NSDate dateWithTimeInterval:seconds sinceDate:self];
 }
 
 @end
