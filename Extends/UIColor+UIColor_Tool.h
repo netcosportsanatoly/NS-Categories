@@ -10,10 +10,11 @@
 
 @interface UIColor (UIColor_Tool)
 
-+(UIColor*)colorWithRGBString:(NSString*)rgbValue alpha:(float)alpha;
-+(UIColor*)colorWithARGBString:(NSString *)strARGB;
-+(UIColor*)colorWithRGB:(int)rgbValue alpha:(float)alpha;
-+(UIColor*)colorWithRGB:(int)rgbValue ;
++ (UIColor *)colorWithRGBString:(NSString*)rgbValue alpha:(float)alpha;
++ (UIColor *)colorWithARGBString:(NSString *)strARGB;
++ (UIColor *)colorWithRGB:(int)rgbValue alpha:(float)alpha;
++ (UIColor *)colorWithRGB:(int)rgbValue;
++ (BOOL)isLightColor:(UIColor *)color;
 
 - (NSString *)toRGBString;
 - (UIColor *)colorByDarkeningColor;
