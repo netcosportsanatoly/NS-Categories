@@ -851,4 +851,54 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     return [UIView viewWithFrame:frame andGradients:@[startColor, endColor] onFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 }
 
+- (void)shakeView:(void (^)())completion{
+    [self shakeViewWithIteration:0 direction:1 completion:completion];
+}
+
+- (void)shakeViewWithIteration:(NSInteger)iterations direction:(NSInteger)direction completion:(void (^)())completion{
+    const NSInteger MAX_SHAKES = 6;
+    const CGFloat SHAKE_DURATION = 0.05;
+    const CGFloat SHAKE_TRANSFORM = 10.0;
+    
+    [UIView animateWithDuration:SHAKE_DURATION
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseIn
+                     animations:^{
+                         self.transform = iterations >= MAX_SHAKES ? CGAffineTransformIdentity : CGAffineTransformMakeTranslation(SHAKE_TRANSFORM * direction, 0);
+                     } completion:^(BOOL finished) {
+                         if (finished){
+                             if (iterations >= MAX_SHAKES){
+                                 if (completion){
+                                     completion();
+                                 }
+                             }
+                             else{
+//                                 [self shakeView:view iterations:(iterations + 1) direction:(direction * -1) completion:completion];
+                                 [self shakeViewWithIteration:(iterations + 1) direction:(direction * -1) completion:completion];
+                             }
+                         }
+                     }];
+}
+
+- (void)borderViewAnimation{
+    [self borderViewAnimation:0.5 fromColor:[UIColor clearColor] toColor:[UIColor redColor]];
+}
+
+- (void)borderViewAnimation:(CGFloat)duration fromColor:(UIColor *)fromColor toColor:(UIColor *)toColor{
+    [self.layer setBorderWidth:1.0];
+    
+    CABasicAnimation *color = [CABasicAnimation animationWithKeyPath:@"borderColor"];
+    color.fromValue = (id)fromColor.CGColor;
+    color.toValue   = (id)toColor.CGColor;
+    self.layer.borderColor = toColor.CGColor;
+    
+    CAAnimationGroup *both = [CAAnimationGroup animation];
+    both.duration   = duration;
+    both.animations = @[color];
+    both.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    
+    [self.layer addAnimation:both forKey:@"color"];
+}
+
+
 @end
