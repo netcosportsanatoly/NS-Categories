@@ -896,7 +896,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     both.animations = @[color];
     both.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     
-    [self.layer addAnimation:both forKey:@"color"];
+    [self.layer addAnimation:both forKey:@"UIView_Tool|borderViewAnimation"];
 }
 
 
