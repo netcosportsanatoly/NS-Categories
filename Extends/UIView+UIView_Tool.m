@@ -873,7 +873,6 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
                                  }
                              }
                              else{
-//                                 [self shakeView:view iterations:(iterations + 1) direction:(direction * -1) completion:completion];
                                  [self shakeViewWithIteration:(iterations + 1) direction:(direction * -1) completion:completion];
                              }
                          }
