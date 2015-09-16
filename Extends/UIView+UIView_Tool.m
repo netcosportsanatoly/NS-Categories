@@ -471,7 +471,6 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 						[l_frame insertObject:[NSValue valueWithCGRect:r] atIndex:0];
                         
 						// pas dans la merde
-						//NSLog(@"cas non géré pour le moment");
 					}
 					
 				}
@@ -500,7 +499,6 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 		
 		hall = prev.size.height + prev.origin.y > hall ? prev.size.height + prev.origin.y  : hall;
 		[all removeObjectAtIndex:0];
-		//NSLog(@"tab frame:\n%@",[l_frame description]);
 	}
 	
 	if (setContent && [self.superview isKindOfClass:[UIScrollView class]]){
@@ -602,10 +600,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 						r = CGRectMake(xo, yo, self.frame.size.width -xo, 20);
 						//[l_frame addObject:[NSValue valueWithCGRect:r]];
 						[l_frame insertObject:[NSValue valueWithCGRect:r] atIndex:0];
-                        
-						// pas dans la merde
-						//NSLog(@"cas non géré pour le moment");
-					}
+                    }
 					
 				}
 			}
@@ -633,7 +628,6 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 		
 		hall = prev.size.height + prev.origin.y > hall ? prev.size.height + prev.origin.y  : hall;
 		[all removeObjectAtIndex:0];
-		//NSLog(@"tab frame:\n%@",[l_frame description]);
 	}
 	
 	if (setContent && [self isKindOfClass:[UIScrollView class]]){
@@ -681,7 +675,6 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 }
 -(NSInteger)setId:(NSString*)idview{
     if([idview isEqualToString:@""])
-        NSLog(@"No ID VIEW");
     self.tag = [idview crc32];
     return self.tag;
 }

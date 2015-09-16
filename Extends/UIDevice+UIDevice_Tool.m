@@ -242,9 +242,7 @@ __strong static NSString *getVerionsiOS_systemVersion = nil;
 
 +(NSString*)getDeviceCountry
 {
-    NSLog(@"%@", [[[NSUserDefaults standardUserDefaults] dictionaryRepresentation] allKeys]);
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    //NSDictionary *dic = [defs dictionaryRepresentation];
     NSString *langs = [defs objectForKey:@"AppleLocale"];
     NSString *l = [langs substringFromIndex:3];
     if ([l length] == 0)
