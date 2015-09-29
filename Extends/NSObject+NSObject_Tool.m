@@ -29,9 +29,7 @@
     {
         if (block)
             block();
-        
-        if (ar_queue)
-            queue = ar_queue[i];
+        queue = ar_queue[i];
 	}
     else
     {
