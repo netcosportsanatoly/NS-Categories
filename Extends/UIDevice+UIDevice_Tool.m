@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Jean Alexandre Iragne. All rights reserved.
 //
 #import <SystemConfiguration/SystemConfiguration.h>
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 #import <sys/sysctl.h>
 #import <net/if.h>
 #import <net/if_dl.h>
@@ -97,13 +99,18 @@
 	if (!uniqueIdentifier)
 		return @"";
     return [uniqueIdentifier strReplace:@"-" by:@""];
+}
 
-    // Deprecated in iOS 7
-    //    NSString *macaddress = [[UIDevice currentDevice] macaddress];
-    //	if (!macaddress)
-    //		return @"";
-    //    NSString *uniqueIdentifier = [macaddress md5];
-    //    return uniqueIdentifier;
++(NSString *) getCarrierName
+{
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+    if (!carrier)
+        return @"No Sim";
+    NSString *carrierName = [carrier carrierName];
+    if (!carrierName)
+        carrierName = @"";
+    return carrierName;
 }
 
 +(BOOL)isUniversalApplication
