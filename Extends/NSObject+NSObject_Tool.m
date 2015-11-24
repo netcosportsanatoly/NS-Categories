@@ -29,7 +29,7 @@
     {
         if (block)
             block();
-        queue = ar_queue[i];
+//        queue = ar_queue[i];
 	}
     else
     {
