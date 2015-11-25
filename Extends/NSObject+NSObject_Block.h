@@ -19,7 +19,7 @@
 -(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block;
 
 #pragma mark - Multiple block management
--(void)performCommonCompletionBlock:(void(^)(NSUInteger numberOfChildBlock))completionBlock afterNumberOfBlockCalls:(NSUInteger)numberOfCalls;
+-(void)performCommonCompletionBlock:(void(^)(NSUInteger numberOfChildBlocksCalled))completionBlock afterNumberOfBlockCalls:(NSUInteger)numberOfCalls;
 -(void)updateNumberOfBlockCalls;
 -(void)clearCommonCompletionBlock;
 

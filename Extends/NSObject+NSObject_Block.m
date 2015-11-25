@@ -7,9 +7,50 @@
 //
 
 #import "NSObject+NSObject_Block.h"
-#import "NSObject_Private.h"
+#import <objc/runtime.h>
 
 #define D_MAX_BG_QUEUE 20
+
+@interface NSObject (_NSObject_Block)
+@property (copy, nonatomic) void(^commonCompletionBLock)(NSUInteger numberOfChildBlock);
+@property (strong, nonatomic) NSNumber *numberBlockCallsBeforeCommonCompletionIsCalled;
+@property (strong, nonatomic) NSNumber *currentNumberOfBlockCalls;
+@end
+
+@implementation NSObject (_NSObject_Block)
+
+#pragma mark Setters
+-(void)setCommonCompletionBLock:(void (^)(NSUInteger))completionBLock
+{
+    objc_setAssociatedObject(self, @selector(commonCompletionBLock), completionBLock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+-(void)setNumberBlockCallsBeforeCommonCompletionIsCalled:(NSNumber *)numberBlockCalls
+{
+    objc_setAssociatedObject(self, @selector(numberBlockCallsBeforeCommonCompletionIsCalled), numberBlockCalls, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+-(void)setCurrentNumberOfBlockCalls:(NSNumber *)currentNumber
+{
+    objc_setAssociatedObject(self, @selector(currentNumberOfBlockCalls), currentNumber, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+#pragma mark Getters
+-(void(^)(NSUInteger))commonCompletionBLock
+{
+    return (void(^)(NSUInteger))objc_getAssociatedObject(self, @selector(commonCompletionBLock));
+}
+
+-(NSNumber *)numberBlockCallsBeforeCommonCompletionIsCalled
+{
+    return (NSNumber *)objc_getAssociatedObject(self, @selector(numberBlockCallsBeforeCommonCompletionIsCalled));
+}
+
+-(NSNumber *)currentNumberOfBlockCalls
+{
+    return (NSNumber *)objc_getAssociatedObject(self, @selector(currentNumberOfBlockCalls));
+}
+@end
 
 @implementation NSObject (NSObject_Block)
 
@@ -90,28 +131,28 @@
 }
 
 #pragma mark - Multiple block management
--(void)performCommonCompletionBlock:(void(^)(NSUInteger numberOfChildBlock))completionBlock afterNumberOfBlockCalls:(NSUInteger)numberOfCalls
+-(void)performCommonCompletionBlock:(void(^)(NSUInteger numberOfChildBlocksCalled))completionBlock afterNumberOfBlockCalls:(NSUInteger)numberOfCalls
 {
-    commonCompletionBLock = [completionBlock copy];
-    numberBlockCallsBeforeCommonCompletionIsCalled = numberOfCalls;
-    currentNumberOfBlockCalls = 0;
+    self.commonCompletionBLock = [completionBlock copy];
+    self.numberBlockCallsBeforeCommonCompletionIsCalled = [NSNumber numberWithUnsignedInteger:numberOfCalls];
+    self.currentNumberOfBlockCalls = [NSNumber numberWithUnsignedInteger:0];
 }
 
 -(void)updateNumberOfBlockCalls
 {
-    currentNumberOfBlockCalls += 1;
-    if (currentNumberOfBlockCalls == numberBlockCallsBeforeCommonCompletionIsCalled && commonCompletionBLock)
+    self.currentNumberOfBlockCalls = [NSNumber numberWithUnsignedInteger:[self.currentNumberOfBlockCalls unsignedIntegerValue] + 1];
+    if ([self.currentNumberOfBlockCalls isEqualToNumber:self.numberBlockCallsBeforeCommonCompletionIsCalled] && self.commonCompletionBLock)
     {
-        commonCompletionBLock(numberBlockCallsBeforeCommonCompletionIsCalled);
+        self.commonCompletionBLock([self.numberBlockCallsBeforeCommonCompletionIsCalled unsignedIntegerValue]);
         [self clearCommonCompletionBlock];
     }
 }
 
 -(void)clearCommonCompletionBlock
 {
-    commonCompletionBLock = nil;
-    currentNumberOfBlockCalls = 0;
-    numberBlockCallsBeforeCommonCompletionIsCalled = 0;
+    self.commonCompletionBLock = nil;
+    self.currentNumberOfBlockCalls = nil;
+    self.numberBlockCallsBeforeCommonCompletionIsCalled = nil;
 }
 
 @end
