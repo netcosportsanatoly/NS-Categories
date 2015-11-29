@@ -282,26 +282,26 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
                                                                         multiplier:1.0
                                                                           constant:frame.origin.x];
     
-//    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint constraintWithItem:subView
-//                                                                       attribute:NSLayoutAttributeWidth
-//                                                                       relatedBy:NSLayoutRelationEqual
-//                                                                          toItem:nil
-//                                                                       attribute:NSLayoutAttributeNotAnAttribute
-//                                                                      multiplier:1.0
-//                                                                        constant:frame.size.width];
-//    
-//    NSLayoutConstraint *constraintHeight = [NSLayoutConstraint constraintWithItem:subView
-//                                                                        attribute:NSLayoutAttributeHeight
-//                                                                        relatedBy:NSLayoutRelationEqual
-//                                                                           toItem:nil
-//                                                                        attribute:NSLayoutAttributeNotAnAttribute
-//                                                                       multiplier:1.0
-//                                                                         constant:frame.size.height];
+    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint constraintWithItem:subView
+                                                                       attribute:NSLayoutAttributeWidth
+                                                                       relatedBy:NSLayoutRelationEqual
+                                                                          toItem:nil
+                                                                       attribute:NSLayoutAttributeNotAnAttribute
+                                                                      multiplier:1.0
+                                                                        constant:frame.size.width];
+    
+    NSLayoutConstraint *constraintHeight = [NSLayoutConstraint constraintWithItem:subView
+                                                                        attribute:NSLayoutAttributeHeight
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:nil
+                                                                        attribute:NSLayoutAttributeNotAnAttribute
+                                                                       multiplier:1.0
+                                                                         constant:frame.size.height];
 
     [self addConstraint:constraintTop];
     [self addConstraint:constraintLeading];
-//    [self addConstraint:constraintWidth];
-//    [self addConstraint:constraintHeight];
+    [self addConstraint:constraintWidth];
+    [self addConstraint:constraintHeight];
 }
 
 -(void)setCenterJAPaddings:(id)paddings{
