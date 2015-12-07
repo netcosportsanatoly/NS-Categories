@@ -91,6 +91,21 @@ inline static void zeroClearInt(NSInteger* p, size_t count) { memset(p, 0, sizeo
     return newImage;
 }
 
++ (UIImage *)roundedImageFromImage:(UIImage *)image size:(CGSize)imageSize withCornerRadius:(float)cornerRadius
+{
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0.0);   //  <= notice 0.0 as third scale parameter. It is important cause default draw scale ≠ 1.0. Try 1.0 - it will draw an ugly image..
+    CGRect bounds=(CGRect){CGPointZero,imageSize};
+    [[UIBezierPath bezierPathWithRoundedRect:bounds
+                                cornerRadius:cornerRadius] addClip];
+    [image drawInRect:bounds];
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return finalImage;
+}
+
+
+
 + (UIImage *)resizableImage:(NSString *)imageName withCapInsets:(UIEdgeInsets)capInsets{
     UIImage *im = nil;
 //    if ([NSObject getVerionsiOS] >= 5){

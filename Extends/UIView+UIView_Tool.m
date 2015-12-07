@@ -264,6 +264,46 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 	return view;
 }
 
+-(void)addBasicConstraintsFromFrame:(CGRect)frame onView:(UIView *)subView
+{
+    NSLayoutConstraint *constraintTop = [NSLayoutConstraint constraintWithItem:subView
+                                                                     attribute:NSLayoutAttributeTop
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:self
+                                                                     attribute:NSLayoutAttributeTop
+                                                                    multiplier:1.0
+                                                                      constant:frame.origin.y];
+    
+    NSLayoutConstraint *constraintLeading = [NSLayoutConstraint constraintWithItem:subView
+                                                                         attribute:NSLayoutAttributeLeading
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self
+                                                                         attribute:NSLayoutAttributeLeading
+                                                                        multiplier:1.0
+                                                                          constant:frame.origin.x];
+    
+    NSLayoutConstraint *constraintWidth = [NSLayoutConstraint constraintWithItem:subView
+                                                                       attribute:NSLayoutAttributeWidth
+                                                                       relatedBy:NSLayoutRelationEqual
+                                                                          toItem:nil
+                                                                       attribute:NSLayoutAttributeNotAnAttribute
+                                                                      multiplier:1.0
+                                                                        constant:frame.size.width];
+    
+    NSLayoutConstraint *constraintHeight = [NSLayoutConstraint constraintWithItem:subView
+                                                                        attribute:NSLayoutAttributeHeight
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:nil
+                                                                        attribute:NSLayoutAttributeNotAnAttribute
+                                                                       multiplier:1.0
+                                                                         constant:frame.size.height];
+
+    [self addConstraint:constraintTop];
+    [self addConstraint:constraintLeading];
+    [self addConstraint:constraintWidth];
+    [self addConstraint:constraintHeight];
+}
+
 -(void)setCenterJAPaddings:(id)paddings{
 	[self renderRelativeSubviewsSetMyContentScroll:NO paddings:paddings];
 	CGFloat w = 0;

@@ -18,6 +18,7 @@
 + (UIImage *)imageWithImage:(UIImage *)sourceImage scaledToWidth:(float)width;
 + (UIImage *)imageWithImage:(UIImage *)sourceImage scaledRelativeToSize:(CGSize)size;
 + (UIImage *)imageWithImage:(UIImage *)image withSize:(CGSize)newSize;
++ (UIImage *)roundedImageFromImage:(UIImage *)image size:(CGSize)imageSize withCornerRadius:(float)cornerRadius;
 + (UIImage *)resizableImage:(NSString *)imageName withCapInsets:(UIEdgeInsets)capInsets;
 + (UIImage *)colorizeImage:(UIImage *)baseImage color:(UIColor *)theColor;
 + (UIImage *)colorizeImage:(UIImage *)baseImage color:(UIColor *)theColor verticalOffSet:(int)verticalOffSet;
