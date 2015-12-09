@@ -20,6 +20,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 
 @implementation UIView (UIView_Tool)
 
+#pragma mark Properties set/get
 - (id)parentViewController
 {
     return objc_getAssociatedObject(self, kParentViewControllerKey);
@@ -40,6 +41,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     objc_setAssociatedObject(self, kTagObjectiveKey, obj, OBJC_ASSOCIATION_ASSIGN);
 }
 
+#pragma mark Instance methods
 -(void)bouingAppear:(BOOL)appear oncomplete:(void (^)(void))oncomplete{
     if (!appear){
         self.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1.0);

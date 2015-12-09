@@ -60,15 +60,14 @@
 	return [UIColor colorWithRGB:rgbValue alpha:1.0];
 }
 
-+ (BOOL)isLightColor:(UIColor *)color
+#pragma mark - Instance methods
+- (BOOL)isLightColor
 {
     CGFloat white = 0;
-    [color getWhite:&white alpha:nil];
+    [self getWhite:&white alpha:nil];
     return (white > 0.5);
 }
 
-
-#pragma mark - Instance methods
 - (NSString *)toRGBString
 {
     const CGFloat *components = CGColorGetComponents(self.CGColor);
