@@ -32,20 +32,26 @@
     return images;
 }
 
-+(UIImage *) getLastImageFromLibrary
++(NSArray *) getLatestImagesFromLibraryLimitedTo:(NSUInteger)limit
 {
-    __block UIImage *lastImage = nil;
+    __block NSMutableArray *images = [NSMutableArray new];
     PHFetchResult *fetchResult = [UIImage getImagesFromPhotoLibraryOrderedByCreationDate];
     
-    if ([fetchResult count] > 0)
-    {
-        PHAsset *asset = [fetchResult lastObject];
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:PHImageRequestOptionsVersionCurrent resultHandler:^(UIImage *result, NSDictionary *info)
+    [fetchResult enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop)
+     {
+         if (EXISTS(asset, [PHAsset class]))
          {
-             lastImage = result;
-         }];
-    }
-    return lastImage;
+             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:PHImageRequestOptionsVersionCurrent resultHandler:^(UIImage *result, NSDictionary *info)
+              {
+                  if (result)
+                      [images addObject:result];
+                  
+                  if (idx + 1 == limit)
+                      *stop = YES;
+              }];
+         }
+     }];
+    return images;
 }
 
 +(PHFetchResult *)getImagesFromPhotoLibraryOrderedByCreationDate
@@ -58,43 +64,63 @@
 #pragma mark Instance methods
 -(void) saveToLibraryInAlbum:(NSString *)album withCompletionBlock:(void(^)(BOOL success, NSError *error))completion
 {
-    __block PHFetchResult *photosAsset;
-    __block PHAssetCollection *collection;
-    __block PHObjectPlaceholder *placeholder;
-    
-    // Find the album
-    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
-    fetchOptions.predicate = [NSPredicate predicateWithFormat:@"title = %@", album];
-    collection = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:fetchOptions].firstObject;
-    
-    // Create the album
-    if (!collection)
-    {
-        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^(void)
-         {
-             PHAssetCollectionChangeRequest *createAlbum = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:album];
-             placeholder = [createAlbum placeholderForCreatedAssetCollection];
-             
-         } completionHandler:^(BOOL success, NSError *error)
-         {
-             if (success)
-             {
-                 PHFetchResult *collectionFetchResult = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                 collection = collectionFetchResult.firstObject;
-             }
-         }];
-    }
-    
-    // Save to the album
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^(void)
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status)
      {
-         PHAssetChangeRequest *assetRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:self];
-         placeholder = [assetRequest placeholderForCreatedAsset];
-         photosAsset = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
-         PHAssetCollectionChangeRequest *albumChangeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:collection assets:photosAsset];
-         [albumChangeRequest addAssets:@[placeholder]];
-         
-     } completionHandler:completion];
+         if (status == PHAuthorizationStatusAuthorized)
+         {
+             // To preserve the metadata, we create an asset from the JPEG NSData representation.
+             // Note that creating an asset from a UIImage discards the metadata.
+             // In iOS 9, we can use -[PHAssetCreationRequest addResourceWithType:data:options].
+             // In iOS 8, we save the image to a temporary file and use +[PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:].
+             NSData *imageData = UIImageJPEGRepresentation(self, 0.8);
+             if ([PHAssetCreationRequest class])
+             {
+                 [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^(void)
+                  {
+                      [[PHAssetCreationRequest creationRequestForAsset] addResourceWithType:PHAssetResourceTypePhoto data:imageData options:nil];
+                  } completionHandler:^(BOOL success, NSError *error)
+                  {
+                      if (!success)
+                      {
+                          DLog( @"Error occurred while saving image to photo library: %@", error );
+                      }
+                      if (completion)
+                          completion(success, error);
+                  }];
+             }
+             else
+             {
+                 NSString *temporaryFileName = [NSProcessInfo processInfo].globallyUniqueString;
+                 NSString *temporaryFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[temporaryFileName stringByAppendingPathExtension:@"jpg"]];
+                 NSURL *temporaryFileURL = [NSURL fileURLWithPath:temporaryFilePath];
+                 
+                 [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^(void)
+                  {
+                      NSError *error = nil;
+                      [imageData writeToURL:temporaryFileURL options:NSDataWritingAtomic error:&error];
+                      if (error)
+                      {
+                          DLog( @"Error occured while writing image data to a temporary file: %@", error );
+                      }
+                      else
+                      {
+                          [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:temporaryFileURL];
+                      }
+                  } completionHandler:^(BOOL success, NSError *error)
+                  {
+                      if (!success)
+                      {
+                          DLog( @"Error occurred while saving image to photo library: %@", error );
+                      }
+                      
+                      // Delete the temporary file.
+                      [[NSFileManager defaultManager] removeItemAtURL:temporaryFileURL error:nil];
+                      if (completion)
+                          completion(success, error);
+                  }];
+             }
+         }
+     }];
 }
-
+    
 @end

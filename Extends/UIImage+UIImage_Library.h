@@ -12,7 +12,7 @@
 
 #pragma mark Class methods
 +(NSArray *) getImagesFromLibraryAfter:(NSDate *)date;
-+(UIImage *) getLastImageFromLibrary;
++(NSArray *) getLatestImagesFromLibraryLimitedTo:(NSUInteger)limit;
 
 #pragma mark - Instance methods
 -(void) saveToLibraryInAlbum:(NSString *)album withCompletionBlock:(void(^)(BOOL success, NSError *error))completion;
