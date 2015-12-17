@@ -8,11 +8,13 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
+
 #import "UIView+UIView_Tool.h"
 #import "NSObject+NSObject_Xpath.h"
 #import "NSString+NSString_Tool.h"
 #import "NSObject+NSObject_Tool.h"
 #import "UIDevice+UIDevice_Tool.h"
+#import "NSArray+NSArray_Bundle.h"
 #import "NSUsefulDefines.h"
 
 static const char * const kParentViewControllerKey = "kParentViewControllerKey";
@@ -20,6 +22,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 
 @implementation UIView (UIView_Tool)
 
+#pragma mark Properties set/get
 - (id)parentViewController
 {
     return objc_getAssociatedObject(self, kParentViewControllerKey);
@@ -38,6 +41,16 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 - (void)setTagObjective:(id)obj
 {
     objc_setAssociatedObject(self, kTagObjectiveKey, obj, OBJC_ASSOCIATION_ASSIGN);
+}
+
+#pragma mark Instance methods
++(id)viewWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    nibBundleOrNil = nibBundleOrNil ? nibBundleOrNil : [NSBundle mainBundle];
+    nibNameOrNil = nibNameOrNil ? nibNameOrNil : NSStringFromClass([self class]);
+    
+    id view = [[nibBundleOrNil loadNibNamed:nibNameOrNil owner:nil options:nil] getObjectsType:[self class]];
+    return view;
 }
 
 -(void)bouingAppear:(BOOL)appear oncomplete:(void (^)(void))oncomplete{

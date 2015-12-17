@@ -12,8 +12,9 @@
 
 #pragma mark - Queue/Block management
 +(BOOL)isMainQueue;
-+(dispatch_queue_t)mainQueueBlock:(void (^)())block;
-+(dispatch_queue_t)backgroundQueueBlock:(void (^)())block;
++(dispatch_queue_t)mainQueueBlock:(void (^)(void))block;
++(dispatch_queue_t)backgroundQueueBlock:(void (^)(void))block;
++(void)backgroundQueue:(dispatch_queue_t)queue withBlock:(void(^)(void))block;
 
 #pragma mark - Block with delay
 -(void)performWithDelay:(NSTimeInterval)time block:(void(^)())block;

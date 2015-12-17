@@ -55,7 +55,7 @@
 @implementation NSObject (NSObject_Block)
 
 #pragma mark - Queue/Block management
-+(dispatch_queue_t)backgroundQueueBlock:(void (^)())block
++(dispatch_queue_t)backgroundQueueBlock:(void (^)(void))block
 {
     static dispatch_queue_t ar_queue[D_MAX_BG_QUEUE];
     static dispatch_once_t onceToken;
@@ -75,7 +75,7 @@
         dispatch_once(&onceToken, ^{
             for (int index = 0; index < D_MAX_BG_QUEUE; index++)
             {
-                ar_queue[index] = dispatch_queue_create([[NSString stringWithFormat:@"NS-Queue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)], NULL);
+                ar_queue[index] = dispatch_queue_create([[NSString stringWithFormat:@"NS-Queue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)], DISPATCH_QUEUE_SERIAL);
             }
         });
         queue = ar_queue[i];
@@ -87,7 +87,7 @@
     return queue;
 }
 
-+(dispatch_queue_t)mainQueueBlock:(void (^)())block
++(dispatch_queue_t)mainQueueBlock:(void (^)(void))block
 {
     dispatch_queue_t queue = dispatch_get_main_queue();
     
@@ -104,6 +104,14 @@
         });
     }
     return queue;
+}
+
++(void)backgroundQueue:(dispatch_queue_t)queue withBlock:(void(^)(void))block
+{
+    dispatch_async(queue, ^{
+        if (block)
+            block();
+    });
 }
 
 +(BOOL)isMainQueue

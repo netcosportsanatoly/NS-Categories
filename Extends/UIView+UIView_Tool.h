@@ -16,6 +16,8 @@ static NSString *kUIViewGradientColorIterations = @"kUIViewGradientColorIteratio
 @property (nonatomic, weak) UIViewController *parentViewController;
 @property (nonatomic, weak) id tagObjective;
 
++(id)viewWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+
 -(void)bouingAppear:(BOOL)appear oncomplete:(void (^)(void))oncomplete;
 
 -(void)zoomInAppear:(void (^)(void))oncomplete;
