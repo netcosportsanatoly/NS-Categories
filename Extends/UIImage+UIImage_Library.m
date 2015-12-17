@@ -32,20 +32,26 @@
     return images;
 }
 
-+(UIImage *) getLastImageFromLibrary
++(NSArray *) getLatestImagesFromLibraryLimitedTo:(NSUInteger)limit
 {
-    __block UIImage *lastImage = nil;
+    __block NSMutableArray *images = [NSMutableArray new];
     PHFetchResult *fetchResult = [UIImage getImagesFromPhotoLibraryOrderedByCreationDate];
     
-    if ([fetchResult count] > 0)
-    {
-        PHAsset *asset = [fetchResult lastObject];
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:PHImageRequestOptionsVersionCurrent resultHandler:^(UIImage *result, NSDictionary *info)
+    [fetchResult enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop)
+     {
+         if (EXISTS(asset, [PHAsset class]))
          {
-             lastImage = result;
-         }];
-    }
-    return lastImage;
+             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:PHImageRequestOptionsVersionCurrent resultHandler:^(UIImage *result, NSDictionary *info)
+              {
+                  if (result)
+                      [images addObject:result];
+                  
+                  if (idx + 1 == limit)
+                      *stop = YES;
+              }];
+         }
+     }];
+    return images;
 }
 
 +(PHFetchResult *)getImagesFromPhotoLibraryOrderedByCreationDate
