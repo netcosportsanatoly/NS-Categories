@@ -115,7 +115,7 @@
     return result;
 }
 
-- (UIImage *) imageNormalized
+- (UIImage *)imageNormalized
 {
     int width = self.size.width;
     int height = self.size.height;
@@ -136,6 +136,17 @@
     CGImageRelease(tmpThumbImage);
     
     return result;
+}
+
+- (UIImage *)imageRounded
+{
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0);   //  <= notice 0.0 as third scale parameter. It is important cause default draw scale ≠ 1.0. Try 1.0 - it will draw an ugly image..
+    CGRect bounds=(CGRect){CGPointZero, self.size};
+    [[UIBezierPath bezierPathWithRoundedRect:bounds cornerRadius:self.size.width/2] addClip];
+    [self drawInRect:bounds];
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return finalImage;
 }
 
 - (void)saveToFile:(NSString *)fileName

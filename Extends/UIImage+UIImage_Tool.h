@@ -14,6 +14,7 @@
 + (UIImage *)loadImageFromFile:(NSString *)fileName withTTL:(NSUInteger)ttl;
 
 #pragma mark - Instance methods
+- (UIImage *)imageRounded;
 - (UIImage *)imageScaledToSize:(CGSize)scaledSize;
 - (UIImage *)imageColorizeWithColor:(UIColor *)theColor inArea:(CGRect)areaColorized;
 - (UIImage *)imageRotatedByDegrees:(CGFloat)degrees;
