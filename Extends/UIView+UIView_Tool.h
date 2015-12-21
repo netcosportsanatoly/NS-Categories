@@ -16,7 +16,7 @@ static NSString *kUIViewGradientColorIterations = @"kUIViewGradientColorIteratio
 @property (nonatomic, weak) UIViewController *parentViewController;
 @property (nonatomic, weak) id tagObjective;
 
-+(id)viewWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
++(instancetype)viewWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 
 -(void)bouingAppear:(BOOL)appear oncomplete:(void (^)(void))oncomplete;
 
@@ -49,6 +49,13 @@ static NSString *kUIViewGradientColorIterations = @"kUIViewGradientColorIteratio
 -(UIView*)insertSubviewToBonceWithConstraint:(UIView*)view options:(NSLayoutFormatOptions)options above:(UIView*)aboveView;
 
 -(void)addBasicConstraintsFromFrame:(CGRect)frame onView:(UIView *)subView;
+-(NSLayoutConstraint *)addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute onView:(UIView *)firstView toView:(UIView *)secondView andConstant:(CGFloat)constant;
+-(NSLayoutConstraint *)addConstraintOnView:(UIView *)firstView withLayoutAttribute:(NSLayoutAttribute)firstLayoutAttribute toView:(UIView *)secondView withLayoutAttribute:(NSLayoutAttribute)secondLayoutAttribute andConstant:(CGFloat)constant;
+
+-(NSLayoutConstraint *)addConstraintEqualWidthOnView:(UIView *)firstView toView:(UIView *)secondView;
+-(NSLayoutConstraint *)addConstraintEqualHeightOnView:(UIView *)firstView toView:(UIView *)secondView;
+-(NSLayoutConstraint *)addConstraintHorizontalSpacingBetween:(UIView *)firstView andView:(UIView *)secondView withConstant:(CGFloat)constant;
+
 -(void)setCenterJAPaddings:(id)paddings;
 -(void)setCenterJA;
 -(CGSize)renderRelatifInlineScroll:(BOOL)scroll align:(NSString*)align;

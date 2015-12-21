@@ -44,7 +44,7 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
 }
 
 #pragma mark Instance methods
-+(id)viewWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
++(instancetype)viewWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     nibBundleOrNil = nibBundleOrNil ? nibBundleOrNil : [NSBundle mainBundle];
     nibNameOrNil = nibNameOrNil ? nibNameOrNil : NSStringFromClass([self class]);
@@ -315,6 +315,47 @@ static const char * const kTagObjectiveKey = "kTagObjectiveKey";
     [self addConstraint:constraintLeading];
     [self addConstraint:constraintWidth];
     [self addConstraint:constraintHeight];
+}
+
+-(NSLayoutConstraint *)addConstraintWithLayoutAttribute:(NSLayoutAttribute)layoutAttribute onView:(UIView *)firstView toView:(UIView *)secondView andConstant:(CGFloat)constant
+{
+    NSLayoutConstraint *customConstraint = [NSLayoutConstraint constraintWithItem:firstView
+                                                                        attribute:layoutAttribute
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:secondView
+                                                                        attribute:layoutAttribute
+                                                                       multiplier:1.0
+                                                                         constant:constant];
+    [self addConstraint:customConstraint];
+    return customConstraint;
+}
+
+-(NSLayoutConstraint *)addConstraintOnView:(UIView *)firstView withLayoutAttribute:(NSLayoutAttribute)firstLayoutAttribute toView:(UIView *)secondView withLayoutAttribute:(NSLayoutAttribute)secondLayoutAttribute andConstant:(CGFloat)constant
+{
+    NSLayoutConstraint *customConstraint = [NSLayoutConstraint constraintWithItem:firstView
+                                                                        attribute:firstLayoutAttribute
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:secondView
+                                                                        attribute:secondLayoutAttribute
+                                                                       multiplier:1.0
+                                                                         constant:constant];
+    [self addConstraint:customConstraint];
+    return customConstraint;
+}
+
+-(NSLayoutConstraint *)addConstraintEqualWidthOnView:(UIView *)firstView toView:(UIView *)secondView
+{
+    return [self addConstraintWithLayoutAttribute:NSLayoutAttributeWidth onView:firstView toView:secondView andConstant:0];
+}
+
+-(NSLayoutConstraint *)addConstraintEqualHeightOnView:(UIView *)firstView toView:(UIView *)secondView
+{
+    return [self addConstraintWithLayoutAttribute:NSLayoutAttributeHeight onView:firstView toView:secondView andConstant:0];
+}
+
+-(NSLayoutConstraint *)addConstraintHorizontalSpacingBetween:(UIView *)firstView andView:(UIView *)secondView withConstant:(CGFloat)constant
+{
+    return [self addConstraintOnView:firstView withLayoutAttribute:NSLayoutAttributeLeading toView:secondView withLayoutAttribute:NSLayoutAttributeTrailing andConstant:constant];
 }
 
 -(void)setCenterJAPaddings:(id)paddings{
