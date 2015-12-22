@@ -9,7 +9,7 @@
 #import "NSObject+NSObject_Block.h"
 #import <objc/runtime.h>
 
-#define D_MAX_BG_QUEUE 20
+#define D_MAX_BG_QUEUE 30
 
 @interface NSObject (_NSObject_Block)
 @property (copy, nonatomic) void(^commonCompletionBLock)(NSUInteger numberOfChildBlock);
@@ -75,7 +75,7 @@
         dispatch_once(&onceToken, ^{
             for (int index = 0; index < D_MAX_BG_QUEUE; index++)
             {
-                ar_queue[index] = dispatch_queue_create([[NSString stringWithFormat:@"NS-Queue%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)], DISPATCH_QUEUE_SERIAL);
+                ar_queue[index] = dispatch_queue_create([[NSString stringWithFormat:@"NS-Queue_%d",i] cStringUsingEncoding:(NSUTF8StringEncoding)], DISPATCH_QUEUE_SERIAL);
             }
         });
         queue = ar_queue[i];
