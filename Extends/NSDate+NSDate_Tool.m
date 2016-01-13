@@ -12,9 +12,14 @@
 
 +(NSDate *)dateWithString:(NSString *)dateTime followingFormat:(NSString *)dateTimeFormat
 {
+    return [NSDate dateWithString:dateTime followingFormat:dateTimeFormat forLocale:[NSLocale currentLocale]];;
+}
+
++(NSDate *)dateWithString:(NSString *)dateTime followingFormat:(NSString *)dateTimeFormat forLocale:(NSLocale *)locale
+{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSTimeZone localTimeZone]];
-    formatter.locale = [NSLocale currentLocale];
+    [formatter setLocale:locale];
     [formatter setDateFormat:dateTimeFormat];
     NSDate *date = [formatter dateFromString:dateTime];
     return date;
