@@ -26,7 +26,6 @@
 #import "UIDevice+UIDevice_Tool.h"
 #import "UIImage+UIImage_Tool.h"
 #import "UILabel+UILabel_Tool.h"
-#import "UILabel+UILabel_Xpath.h"
 #import "UINavigationController+UINavigationController_Tool.h"
 #import "UIView+UIView_Tool.h"
 #import "UIViewController+iPhone_iPad_Xib.h"
