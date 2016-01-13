@@ -24,7 +24,6 @@
 #import "UIApplication+UIApplication_data.h"
 #import "UIColor+UIColor_Tool.h"
 #import "UIDevice+UIDevice_Tool.h"
-#import "UIImage+ImageEffects.h"
 #import "UIImage+UIImage_Tool.h"
 #import "UILabel+UILabel_Tool.h"
 #import "UILabel+UILabel_Xpath.h"
