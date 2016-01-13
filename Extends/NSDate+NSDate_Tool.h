@@ -21,6 +21,17 @@
 +(NSDate *)dateWithString:(NSString *)dateTime followingFormat:(NSString *)dateTimeFormat;
 
 /**
+ *  Create a NSDate instance (with device timezone & specified locale) from a string representing a date-time following the given format.
+ *
+ *  @param dateTime       Date-time as string
+ *  @param dateTimeFormat Format used to describe the date-time
+ *  @param locale         Locale used to parse the date sting
+ *
+ *  @return New NSDate instance
+ */
++(NSDate *)dateWithString:(NSString *)dateTime followingFormat:(NSString *)dateTimeFormat forLocale:(NSLocale *)locale;
+
+/**
  *  Create a NSDate instance (with device timezone & device locale) from an ISO 8601 string representation
  *
  *  @param `dateTime' ISO 8601 string representation
