@@ -25,21 +25,20 @@
     @autoreleasepool
     {
         CIImage *beginImage = [CIImage imageWithCGImage:[self CGImage]];
+        NSMutableDictionary *attributesWithImage = [[NSMutableDictionary alloc] initWithDictionary:attributes];
+        [attributesWithImage setObject:beginImage forKey:@"inputImage"];
         
-        NSDictionary *finalAttributes = nil;
-        if (attributes && [attributes objectForKey:kCIInputImageKey])
-        {
-            finalAttributes = attributes;
+        CIFilter *filter = [CIFilter filterWithName:stringFilter withInputParameters:attributesWithImage];
+        
+        for (id key in attributesWithImage) {
+            NSLog(@"key: %@, value: %@ \n", key, [attributesWithImage objectForKey:key]);
         }
-        else if (attributes && ![attributes objectForKey:kCIInputImageKey])
-        {
-            finalAttributes = [NSDictionary dictionaryWithDictionaries:@{kCIInputImageKey : beginImage}, attributes, nil];
-        }
-        else if (!attributes)
-        {
-            finalAttributes = @{kCIInputImageKey : beginImage};
-        }
-        CIFilter *filter = [CIFilter filterWithName:stringFilter withInputParameters:finalAttributes];
+        
+//        CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur" withInputParameters:@{
+//                                                                                             @"inputImage": beginImage,
+//                                                                                             @"inputRadius": @20
+//                                                                                             }];
+        
         outputImage = [filter outputImage];
     }
     
