@@ -58,6 +58,7 @@
 {
     PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
+    fetchOptions.fetchLimit = 30;
     return [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
 }
 
