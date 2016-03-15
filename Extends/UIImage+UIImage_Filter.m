@@ -39,7 +39,12 @@
 //                                                                                             @"inputRadius": @20
 //                                                                                             }];
         
-        outputImage = [filter outputImage];
+        if ([stringFilter isEqual: @"NONE"]) {
+            outputImage = beginImage;
+        }
+        else {
+            outputImage = [filter outputImage];
+        }
     }
     
     CGImageRef cgimg = NULL;
