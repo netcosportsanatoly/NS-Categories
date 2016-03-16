@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Photos/Photos.h>
 
 @interface UIImage (UIImage_Library)
 
 #pragma mark Class methods
 +(NSArray *) getImagesFromLibraryAfter:(NSDate *)date;
 +(NSArray *) getLatestImagesFromLibraryLimitedTo:(NSUInteger)limit;
++(PHFetchResult *) getImagesFromPhotoLibraryOrderedByCreationDate;
 
 #pragma mark - Instance methods
 -(void) saveToLibraryInAlbum:(NSString *)album withCompletionBlock:(void(^)(BOOL success, NSError *error))completion;

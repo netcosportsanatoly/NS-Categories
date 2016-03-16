@@ -62,11 +62,11 @@
     return images;
 }
 
-+(PHFetchResult *)getImagesFromPhotoLibraryOrderedByCreationDate
++(PHFetchResult *) getImagesFromPhotoLibraryOrderedByCreationDate
 {
     PHFetchOptions *fetchOptions = [PHFetchOptions new];
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
-    fetchOptions.fetchLimit = 6;
+    fetchOptions.fetchLimit = 50;
     return [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
 }
 
