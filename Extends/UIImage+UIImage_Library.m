@@ -54,8 +54,8 @@
                   if (result)
                       [images addObject:result];
                   
-                  if (idx + 1 == limit)
-                      *stop = YES;
+                  //if (idx + 1 == limit)
+                  //    *stop = YES;
               }];
          }
      }];
@@ -64,9 +64,9 @@
 
 +(PHFetchResult *)getImagesFromPhotoLibraryOrderedByCreationDate
 {
-    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
-    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-    fetchOptions.fetchLimit = 30;
+    PHFetchOptions *fetchOptions = [PHFetchOptions new];
+    fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
+    fetchOptions.fetchLimit = 6;
     return [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
 }
 
