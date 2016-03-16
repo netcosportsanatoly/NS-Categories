@@ -22,7 +22,11 @@
      {
          if (EXISTS(asset, [PHAsset class]) && [asset.creationDate compare:date] == NSOrderedAscending) // asset.creationDate is earlier than date
          {
-             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:PHImageRequestOptionsVersionCurrent resultHandler:^(UIImage *result, NSDictionary *info)
+             PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+             options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+             options.synchronous = YES;
+             
+             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info)
               {
                   if (result)
                       [images addObject:result];
@@ -41,7 +45,11 @@
      {
          if (EXISTS(asset, [PHAsset class]))
          {
-             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:PHImageRequestOptionsVersionCurrent resultHandler:^(UIImage *result, NSDictionary *info)
+             PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
+             options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+             options.synchronous = YES;
+             
+             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFill options:options resultHandler:^(UIImage *result, NSDictionary *info)
               {
                   if (result)
                       [images addObject:result];
