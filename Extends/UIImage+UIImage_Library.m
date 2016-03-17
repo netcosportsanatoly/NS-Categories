@@ -16,7 +16,7 @@
 +(NSArray *) getImagesFromLibraryAfter:(NSDate *)date
 {
     __block NSMutableArray *images = [NSMutableArray new];
-    PHFetchResult *fetchResult = [UIImage getImagesFromPhotoLibraryOrderedByCreationDate];
+    PHFetchResult *fetchResult = [UIImage getImagesFromPhotoLibraryOrderedByCreationDate:50];
     
     [fetchResult enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop)
      {
@@ -39,7 +39,7 @@
 +(NSArray *) getLatestImagesFromLibraryLimitedTo:(NSUInteger)limit
 {
     __block NSMutableArray *images = [NSMutableArray new];
-    PHFetchResult *fetchResult = [UIImage getImagesFromPhotoLibraryOrderedByCreationDate];
+    PHFetchResult *fetchResult = [UIImage getImagesFromPhotoLibraryOrderedByCreationDate:50];
     
     [fetchResult enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(PHAsset *asset, NSUInteger idx, BOOL * _Nonnull stop)
      {
@@ -62,11 +62,11 @@
     return images;
 }
 
-+(PHFetchResult *) getImagesFromPhotoLibraryOrderedByCreationDate
++(PHFetchResult *) getImagesFromPhotoLibraryOrderedByCreationDate:(NSUInteger)limit
 {
     PHFetchOptions *fetchOptions = [PHFetchOptions new];
     fetchOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
-    fetchOptions.fetchLimit = 75;
+    fetchOptions.fetchLimit = limit;
     return [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:fetchOptions];
 }
 

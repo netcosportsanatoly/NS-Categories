@@ -14,7 +14,7 @@
 #pragma mark Class methods
 +(NSArray *) getImagesFromLibraryAfter:(NSDate *)date;
 +(NSArray *) getLatestImagesFromLibraryLimitedTo:(NSUInteger)limit;
-+(PHFetchResult *) getImagesFromPhotoLibraryOrderedByCreationDate;
++(PHFetchResult *) getImagesFromPhotoLibraryOrderedByCreationDate:(NSUInteger)limit;
 
 #pragma mark - Instance methods
 -(void) saveToLibraryInAlbum:(NSString *)album withCompletionBlock:(void(^)(BOOL success, NSError *error))completion;
