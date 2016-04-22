@@ -125,12 +125,14 @@
 	return [model hasSubstring:@"iPad"];
 }
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < 80000
 +(BOOL)isOrientationPortrait
 {
     if ([UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortrait || [UIApplication sharedApplication].statusBarOrientation == UIDeviceOrientationPortraitUpsideDown)
         return YES;
     return NO;
 }
+#endif
 
 +(CGRect)getScreenFrame
 {
