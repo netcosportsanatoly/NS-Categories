@@ -139,6 +139,11 @@
 	return CGRectMake([UIScreen mainScreen].bounds.origin.x, [UIScreen mainScreen].bounds.origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
 }
 
++(BOOL)isIphoneX
+{
+    return [UIDevice getScreenFrame].size.height == 812 ? YES : NO;
+}
+
 +(BOOL) isIphone6Plus
 {
     return [UIDevice getScreenFrame].size.height == 736 ? YES : NO;

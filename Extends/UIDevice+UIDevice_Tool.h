@@ -26,6 +26,7 @@
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 80000
 +(BOOL) isOrientationPortrait;
 #endif
++(BOOL)isIphoneX;
 +(BOOL) isIphone6Plus;
 +(BOOL) isIphone6;
 +(BOOL) isIphone5;
