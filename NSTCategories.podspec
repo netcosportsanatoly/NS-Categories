@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = "NS-Categories"
+  s.name             = "NSTCategories"
   s.version          = "1.1.6"
   s.summary          = "The open source Categories from Netco Sports"
   s.homepage         = "https://github.com/netcosports/NS-Categories"
@@ -15,6 +15,4 @@ Pod::Spec.new do |s|
 
   s.frameworks = 'UIKit', 'Security'
   s.libraries = 'z'
-
-  s.module_name = 'NSCategories'
 end
